@@ -1,1 +1,55 @@
-<p>activacion-cuenta works!</p>
+<div class="activation-container">
+  <h2>Activación de Cuenta</h2>
+  
+  <div class="email-display">
+    <p>Código enviado a: <strong>{{email}}</strong></p>
+    <p>Tiempo restante: {{countdownDisplay}}</p>
+  </div>
+
+  <form [formGroup]="activationForm" (ngSubmit)="onSubmit()">
+    <div class="form-group">
+      <label for="activation-code">Código de 6 dígitos</label>
+      <input 
+        type="text" 
+        id="activation-code" 
+        formControlName="code" 
+        placeholder="Ingresa el código"
+        maxlength="6"
+      >
+      
+      <div *ngIf="activationForm.get('code')?.invalid && activationForm.get('code')?.touched" 
+           class="error-messages">
+        <div *ngIf="activationForm.get('code')?.errors?.['required']">
+          El código es requerido
+        </div>
+        <div *ngIf="activationForm.get('code')?.errors?.['minlength'] || 
+                    activationForm.get('code')?.errors?.['maxlength']">
+          El código debe tener exactamente 6 dígitos
+        </div>
+        <div *ngIf="activationForm.get('code')?.errors?.['pattern']">
+          Solo se permiten números
+        </div>
+      </div>
+    </div>
+
+    <button 
+      type="submit" 
+      class="submit-button"
+      [disabled]="activationForm.invalid || countdown <= 0"
+    >
+      Activar Cuenta
+    </button>
+  </form>
+
+  <div class="resend-section">
+    <p>¿No recibiste el código?</p>
+    <button 
+      type="button" 
+      class="resend-button"
+      (click)="resendCode()"
+      [disabled]="countdown > 0"
+    >
+      Reenviar Código
+    </button>
+  </div>
+</div>

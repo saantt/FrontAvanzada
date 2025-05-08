@@ -1,1 +1,38 @@
-<p>mis-reportes works!</p>
+<div class="my-reports-container">
+    <h1 class="title">Mis Reportes</h1>
+  
+    <div *ngIf="reports.length === 0" class="no-reports">
+      No has creado ningún reporte aún.
+    </div>
+  
+    <div *ngIf="reports.length > 0" class="my-reports-list">
+      <div *ngFor="let report of reports" class="my-report-item">
+        <div class="my-report-thumbnail">
+          <img *ngIf="report.images && report.images.length > 0" [src]="report.images[0]" alt="Report Image">
+          <div *ngIf="!report.images || report.images.length === 0" class="no-image">Sin Imagen</div>
+        </div>
+        <div class="my-report-details">
+          <h2 class="my-report-title">{{ report.title }}</h2>
+          <p class="my-report-category">{{ report.category }}</p>
+          <p class="my-report-description">{{ report.description  }}</p>
+          <div class="my-report-actions">
+            <button (click)="showReportDetails(report.id)">Ver Detalles</button>
+            <button (click)="editReport(report.id)">Editar</button>
+            <button (click)="deleteReport(report.id)">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="selectedReport" class="report-details-modal">
+      <div class="modal-content">
+         <span class="close-button" (click)="closeReportDetails()">&times;</span>
+        <h2 class="modal-title">{{ selectedReport.title }}</h2>
+        <p class="modal-category">{{ selectedReport.category }}</p>
+        <p class="modal-description">{{ selectedReport.description }}</p>
+         <div class="modal-images">
+          <img *ngFor="let image of selectedReport.images" [src]="image" alt="Report Image">
+        </div>
+        </div>
+    </div>
+  </div>

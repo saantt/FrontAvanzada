@@ -1,1 +1,48 @@
-<p>comentarios works!</p>
+<div class="comment-form-container">
+    <form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <textarea 
+          formControlName="text" 
+          placeholder="Escribe tu comentario..."
+          rows="3"
+        ></textarea>
+        
+        <div *ngIf="commentForm.get('text')?.invalid && commentForm.get('text')?.touched" 
+             class="error-messages">
+          <div *ngIf="commentForm.get('text')?.errors?.['required']">
+            El comentario es requerido
+          </div>
+          <div *ngIf="commentForm.get('text')?.errors?.['maxlength']">
+            Máximo 500 caracteres
+          </div>
+        </div>
+      </div>
+  
+      <div class="image-section">
+        <label class="file-upload">
+          <input 
+            type="file" 
+            accept="image/*" 
+            (change)="onFileChange($event)"
+            hidden
+          >
+          <span class="upload-button">Subir imagen</span>
+        </label>
+        
+        <div *ngIf="previewImage" class="image-preview">
+          <img [src]="previewImage" alt="Vista previa">
+          <button type="button" (click)="removeImage()" class="remove-image">
+            &times;
+          </button>
+        </div>
+      </div>
+  
+      <button 
+        type="submit" 
+        class="submit-button"
+        [disabled]="commentForm.invalid"
+      >
+        Publicar Comentario
+      </button>
+    </form>
+  </div>

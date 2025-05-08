@@ -1,1 +1,20 @@
-<p>notificaciones works!</p>
+<div class="notifications-container">
+  <h2 class="notifications-title">Notificaciones</h2>
+  <ul class="notifications-list" *ngIf="notifications && notifications.length > 0; else noNotifications">
+    <li *ngFor="let notification of notifications" class="notification-item" (click)="markAsReadAndGoToReport(notification)" [ngClass]="{'unread': !notification.read}">
+      <div class="notification-content">
+        <div class="notification-header">
+          <span class="notification-type">{{ getNotificationTypeIcon(notification.type) }} {{ notification.type }}</span>
+          <span class="notification-date">{{ notification.createdAt | date:'medium' }}</span>
+        </div>
+        <p class="notification-message">{{ notification.message }}</p>
+      </div>
+      <div class="chevron-container">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </div>
+    </li>
+  </ul>
+  <ng-template #noNotifications>
+    <p class="no-notifications">No hay notificaciones.</p>
+  </ng-template>
+</div>

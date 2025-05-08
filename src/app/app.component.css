@@ -1,0 +1,148 @@
+/* app.component.css */
+/* Estilo inspirado en Apple - Minimalista y elegante */
+:root {
+    --apple-white: #f5f5f7;
+    --apple-black: #1d1d1f;
+    --apple-gray: #86868b;
+    --apple-light-gray: #e8e8ed;
+    --apple-blue: #0066cc;
+    --apple-hover-gray: #f5f5f7;
+  }
+  
+  .apple-style-container {
+    font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, sans-serif;
+    color: var(--apple-black);
+    line-height: 1.5;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .apple-header {
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--apple-light-gray);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .logo {
+    font-weight: 600;
+    font-size: 24px;
+    margin: 0;
+    padding: 15px 0;
+  }
+  
+  .main-nav {
+    display: flex;
+  }
+  
+  .nav-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 2px;
+  }
+  
+  .nav-link {
+    color: var(--apple-black);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 16px 15px;
+    border-radius: 18px;
+    transition: all 0.3s ease;
+    display: inline-block;
+  }
+  
+  .nav-link:hover {
+    background-color: var(--apple-hover-gray);
+    color: var(--apple-blue);
+  }
+  
+  .nav-link.active {
+    color: var(--apple-blue);
+    font-weight: 500;
+  }
+  
+  .apple-main {
+    flex: 1;
+    padding: 40px 22px;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+  }
+  
+  .apple-footer {
+    background-color: var(--apple-white);
+    border-top: 1px solid var(--apple-light-gray);
+    padding: 20px 0;
+  }
+  
+  .footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .footer-links {
+    display: flex;
+    gap: 20px;
+  }
+  
+  .footer-links a {
+    color: var(--apple-gray);
+    text-decoration: none;
+    font-size: 12px;
+  }
+  
+  .footer-links a:hover {
+    text-decoration: underline;
+    color: var(--apple-blue);
+  }
+  
+  /* Efecto de hover suave */
+  @media (prefers-reduced-motion: no-preference) {
+    .nav-link {
+      transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .header-content {
+      flex-direction: column;
+      padding: 10px;
+    }
+    
+    .nav-list {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 5px;
+    }
+    
+    .nav-link {
+      padding: 10px 12px;
+      font-size: 13px;
+    }
+    
+    .footer-content {
+      flex-direction: column;
+      gap: 10px;
+    }
+  }

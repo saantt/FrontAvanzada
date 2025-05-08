@@ -1,1 +1,118 @@
-<p>cuenta-admin works!</p>
+<div class="admin-container">
+    <h1 class="page-title">Panel de Administración</h1>
+  
+    <section class="section">
+      <h2 class="section-title">Gestión de Usuarios</h2>
+      <div class="search-filter">
+        <input
+          type="text"
+          placeholder="Buscar usuarios..."
+          (input)="buscarUsuarios($event)"
+          class="search-input"
+        />
+        <div class="filter-options">
+          <label class="filter-label">Filtrar por:</label>
+          <select (change)="filtrarUsuarios($event)" class="filter-select">
+            <option value="todos">Todos</option>
+            <option value="activos">Activos</option>
+            <option value="inactivos">Inactivos</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="header-cell">Nombre</th>
+              <th class="header-cell">Correo Electrónico</th>
+              <th class="header-cell">Ciudad</th>
+              <th class="header-cell">Estado</th>
+              <th class="header-cell">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let usuario of usuariosFiltrados" class="data-row">
+              <td class="data-cell">{{ usuario.nombre }}</td>
+              <td class="data-cell">{{ usuario.email }}</td>
+              <td class="data-cell">{{ usuario.ciudad }}</td>
+              <td class="data-cell">{{ usuario.activo ? 'Activo' : 'Inactivo' }}</td>
+              <td class="data-cell actions">
+                <button (click)="editarUsuario(usuario.id)" class="action-button edit-button">
+                  Editar
+                </button>
+                <button (click)="eliminarUsuario(usuario.id)" class="action-button delete-button">
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="usuariosFiltrados.length === 0" class="no-data">No se han encontrado usuarios.</div>
+    </section>
+  
+    <section class="section">
+      <h2 class="section-title">Gestión de Reportes</h2>
+      <div class="search-filter">
+        <input
+          type="text"
+          placeholder="Buscar reportes..."
+          (input)="buscarReportes($event)"
+          class="search-input"
+        />
+        <div class="filter-options">
+          <label class="filter-label">Filtrar por:</label>
+          <select (change)="filtrarReportes($event)" class="filter-select">
+            <option value="todos">Todos</option>
+            <option value="pendientes">Pendientes</option>
+            <option value="verificados">Verificados</option>
+            <option value="rechazados">Rechazados</option>
+            <option value="resueltos">Resueltos</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-container">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th class="header-cell">Título</th>
+              <th class="header-cell">Categoría</th>
+              <th class="header-cell">Fecha</th>
+              <th class="header-cell">Estado</th>
+              <th class="header-cell">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reporte of reportesFiltrados" class="data-row">
+              <td class="data-cell">{{ reporte.titulo }}</td>
+              <td class="data-cell">{{ reporte.categoria }}</td>
+              <td class="data-cell">{{ reporte.fecha | date: 'medium' }}</td>
+              <td class="data-cell">{{ reporte.estado }}</td>
+              <td class="data-cell actions">
+                <button (click)="verReporte(reporte.id)" class="action-button view-button">Ver</button>
+                <button (click)="editarReporte(reporte.id)" class="action-button edit-button">Editar</button>
+                <button
+                  (click)="rechazarReporte(reporte.id)"
+                  *ngIf="reporte.estado === 'Pendiente'"
+                  class="action-button reject-button"
+                >
+                  Rechazar
+                </button>
+                <button
+                  (click)="verificarReporte(reporte.id)"
+                  *ngIf="reporte.estado === 'Pendiente'"
+                  class="action-button verify-button"
+                >
+                  Verificar
+                </button>
+                <button (click)="marcarResuelto(reporte.id)" class="action-button resolve-button">
+                  Resuelto
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div *ngIf="reportesFiltrados.length === 0" class="no-data">No se han encontrado reportes.</div>
+    </section>
+  </div>

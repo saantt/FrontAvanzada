@@ -1,0 +1,210 @@
+/* Estilos generales al estilo Apple */
+.report-generator-container {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px;
+  color: #1d1d1f;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.report-generator-container h2 {
+  font-size: 28px;
+  font-weight: 600;
+  margin-bottom: 32px;
+  color: #1d1d1f;
+}
+
+/* Secciones del formulario */
+.form-section {
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.form-section:last-child {
+  border-bottom: none;
+}
+
+.form-section h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 16px;
+  color: #1d1d1f;
+}
+
+/* Grupos de formulario */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 500;
+  margin-bottom: 8px;
+  color: #86868b;
+}
+
+/* Selects estilo Apple */
+select {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 1px solid #d2d2d7;
+  border-radius: 8px;
+  background-color: #fff;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+  background-size: 16px;
+  transition: all 0.2s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: #0071e3;
+  box-shadow: 0 0 0 3px rgba(0, 125, 250, 0.1);
+}
+
+/* Checkboxes y radios estilo Apple */
+.category-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.category-option {
+  display: flex;
+  align-items: center;
+}
+
+.category-option input[type="checkbox"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #d2d2d7;
+  border-radius: 4px;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.category-option input[type="checkbox"]:checked {
+  background-color: #0071e3;
+  border-color: #0071e3;
+}
+
+.category-option input[type="checkbox"]:checked::after {
+  content: "";
+  position: absolute;
+  left: 6px;
+  top: 2px;
+  width: 4px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.format-options {
+  display: flex;
+  gap: 24px;
+}
+
+.format-options label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.format-options input[type="radio"] {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 1px solid #d2d2d7;
+  border-radius: 50%;
+  margin-right: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.format-options input[type="radio"]:checked {
+  border-color: #0071e3;
+}
+
+.format-options input[type="radio"]:checked::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 10px;
+  height: 10px;
+  background-color: #0071e3;
+  border-radius: 50%;
+}
+
+/* Rango de fechas */
+.date-range-group {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.date-range-group input[type="date"] {
+  padding: 12px 16px;
+  font-size: 15px;
+  border: 1px solid #d2d2d7;
+  border-radius: 8px;
+  background-color: #fff;
+  transition: all 0.2s ease;
+}
+
+.date-range-group input[type="date"]:focus {
+  outline: none;
+  border-color: #0071e3;
+  box-shadow: 0 0 0 3px rgba(0, 125, 250, 0.1);
+}
+
+.date-range-group span {
+  font-size: 15px;
+  color: #86868b;
+}
+
+/* Botón de generar */
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.generate-button {
+  background-color: #0071e3;
+  color: white;
+  border: none;
+  border-radius: 980px;
+  padding: 12px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.generate-button:hover {
+  background-color: #0062c3;
+}
+
+.generate-button:active {
+  background-color: #0052a3;
+}
+
+/* Efectos hover */
+.category-option:hover,
+.format-options label:hover {
+  color: #0071e3;
+}

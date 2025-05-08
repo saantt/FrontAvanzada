@@ -1,0 +1,116 @@
+<div class="management-container">
+    <h2>Gestión de Reportes</h2>
+  
+    <div class="filter-section">
+      <form [formGroup]="filterForm">
+        <div class="filter-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Buscar</mat-label>
+            <input matInput formControlName="search" placeholder="Título o usuario">
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Categoría</mat-label>
+            <mat-select formControlName="category">
+              <mat-option *ngFor="let cat of categories" [value]="cat">{{cat}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Estado</mat-label>
+            <mat-select formControlName="status">
+              <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+  
+        <div class="filter-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Desde</mat-label>
+            <input matInput formControlName="dateFrom" type="date">
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Hasta</mat-label>
+            <input matInput formControlName="dateTo" type="date">
+          </mat-form-field>
+        </div>
+      </form>
+    </div>
+  
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let element">{{element.id}}</td>
+        </ng-container>
+  
+        <!-- Title Column -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef>Título</th>
+          <td mat-cell *matCellDef="let element">{{element.title}}</td>
+        </ng-container>
+  
+        <!-- Category Column -->
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef>Categoría</th>
+          <td mat-cell *matCellDef="let element">{{element.category}}</td>
+        </ng-container>
+  
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let element">
+            <span [class]="'status-badge ' + element.status">
+              {{element.status | titlecase}}
+            </span>
+          </td>
+        </ng-container>
+  
+        <!-- Date Column -->
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef>Fecha</th>
+          <td mat-cell *matCellDef="let element">{{element.date | date:'dd/MM/yyyy'}}</td>
+        </ng-container>
+  
+        <!-- User Column -->
+        <ng-container matColumnDef="user">
+          <th mat-header-cell *matHeaderCellDef>Usuario</th>
+          <td mat-cell *matCellDef="let element">{{element.user}}</td>
+        </ng-container>
+  
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button (click)="openDetails(element)" title="Ver detalles">
+              <mat-icon>visibility</mat-icon>
+            </button>
+            <button mat-icon-button color="primary" (click)="changeStatus(element, 'verified')" title="Verificar">
+              <mat-icon>check_circle</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="changeStatus(element, 'rejected')" title="Rechazar">
+              <mat-icon>cancel</mat-icon>
+            </button>
+            <button mat-icon-button color="accent" (click)="changeStatus(element, 'resolved')" title="Marcar como resuelto">
+              <mat-icon>done_all</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+  
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </div>
+  
+    <!-- Dialogo para motivo de rechazo -->
+    <div *ngIf="selectedReport" class="rejection-dialog">
+      <h3>Motivo de rechazo para {{selectedReport.title}}</h3>
+      <textarea [(ngModel)]="rejectionReason" placeholder="Explique el motivo del rechazo..."></textarea>
+      <div class="dialog-actions">
+        <button mat-button (click)="selectedReport = null">Cancelar</button>
+        <button mat-button color="warn" (click)="changeStatus(selectedReport, 'rejected')">Confirmar Rechazo</button>
+      </div>
+    </div>
+  </div>

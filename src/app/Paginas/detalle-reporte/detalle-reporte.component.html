@@ -1,1 +1,56 @@
-<p>detalle-reporte works!</p>
+<div class="apple-dialog">
+  <h2 mat-dialog-title>{{data.reporte?.titulo}}</h2>
+
+  <mat-dialog-content>
+    <div *ngIf="data.reporte" class="detail-container">
+      <div class="detalle-fila">
+        <span class="detalle-etiqueta">Categoría:</span>
+        <span>{{data.reporte.categoria}}</span>
+      </div>
+
+      <div class="detalle-fila">
+        <span class="detalle-etiqueta">Estado:</span>
+        <span class="estado-badge {{data.reporte.estado}}">
+          {{data.reporte.estado | titlecase}}
+        </span>
+      </div>
+
+      <div class="detalle-fila">
+        <span class="detalle-etiqueta">Fecha:</span>
+        <span>{{data.reporte.fecha | date:'mediumDate'}}</span>
+      </div>
+
+      <div class="detalle-fila">
+        <span class="detalle-etiqueta">Usuario:</span>
+        <span>{{data.reporte.usuario}}</span>
+      </div>
+
+      <div class="detalle-fila">
+        <span class="detalle-etiqueta">Ubicación:</span>
+        <span>{{data.reporte.ubicacion}}</span>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <h3>Descripción Completa</h3>
+      <p class="descripcion-text">{{data.reporte.descripcion}}</p>
+
+      <mat-divider *ngIf="data.reporte.imagenes?.length"></mat-divider>
+
+      <h3 *ngIf="data.reporte.imagenes?.length">Imágenes Adjuntas</h3>
+      <div class="galeria-imagenes">
+        <img 
+          *ngFor="let img of data.reporte.imagenes" 
+          [src]="img.url" 
+          [alt]="'Imagen del reporte ' + data.reporte.titulo"
+          (click)="ampliarImagen(img.url)"
+          class="imagen-miniatura"
+        >
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="cerrar()" class="apple-close-button">Cerrar</button>
+  </mat-dialog-actions>
+</div>

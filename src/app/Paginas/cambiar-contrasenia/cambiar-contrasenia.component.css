@@ -1,0 +1,199 @@
+/* Estilos generales */
+.password-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+    background-color: #f5f7fa;
+  }
+  
+  .password-card {
+    width: 100%;
+    max-width: 500px;
+    padding: 2.5rem;
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .password-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+  
+  .password-subtitle {
+    font-size: 1rem;
+    color: #7f8c8d;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  /* Formulario */
+  .password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  .form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  label {
+    font-weight: 500;
+    color: #34495e;
+    font-size: 0.95rem;
+  }
+  
+  .input-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  
+  input {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #dfe6e9;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    padding-right: 40px;
+  }
+  
+  input:focus {
+    outline: none;
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+  }
+  
+  .toggle-password {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    color: #7f8c8d;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .material-icons {
+    font-size: 1.25rem;
+  }
+  
+  /* Indicador de fortaleza de contraseña */
+  .password-strength {
+    margin-top: 0.5rem;
+    height: 6px;
+    border-radius: 3px;
+    background-color: #ecf0f1;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  .strength-bar {
+    height: 100%;
+    width: 0%;
+    transition: all 0.3s ease;
+  }
+  
+  .password-strength.weak .strength-bar {
+    width: 33%;
+    background-color: #e74c3c;
+  }
+  
+  .password-strength.medium .strength-bar {
+    width: 66%;
+    background-color: #f39c12;
+  }
+  
+  .password-strength.strong .strength-bar {
+    width: 100%;
+    background-color: #2ecc71;
+  }
+  
+  .strength-text {
+    position: absolute;
+    right: 0;
+    top: 10px;
+    font-size: 0.75rem;
+    color: #7f8c8d;
+  }
+  
+  /* Botón de envío */
+  .submit-button {
+    width: 100%;
+    padding: 0.875rem;
+    font-size: 1rem;
+    font-weight: 500;
+    color: white;
+    background-color: #3498db;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+  }
+  
+  .submit-button:hover:not(:disabled) {
+    background-color: #2980b9;
+  }
+  
+  .submit-button:disabled {
+    background-color: #bdc3c7;
+    cursor: not-allowed;
+  }
+  
+  /* Spinner */
+  .spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    border-top-color: white;
+    animation: spin 1s ease-in-out infinite;
+  }
+  
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  
+  /* Mensajes */
+  .success-message, .error-message {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-top: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .success-message {
+    background-color: rgba(46, 204, 113, 0.1);
+    color: #27ae60;
+  }
+  
+  .error-message {
+    background-color: rgba(231, 76, 60, 0.1);
+    color: #c0392b;
+  }
+  
+  /* Responsive */
+  @media (max-width: 600px) {
+    .password-card {
+      padding: 1.5rem;
+    }
+    
+    .password-title {
+      font-size: 1.5rem;
+    }
+  }

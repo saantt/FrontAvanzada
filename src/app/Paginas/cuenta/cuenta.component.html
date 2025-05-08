@@ -1,1 +1,77 @@
-<p>cuenta works!</p>
+<div class="account-container">
+    <div class="account-header">
+      <div class="user-info">
+        <div class="avatar">
+          <span>{{ userInitials }}</span>
+        </div>
+        <div class="user-details">
+          <h2>{{ user?.nombre }}</h2>
+          <p>{{ user?.email }}</p>
+          <p class="location">{{ user?.ciudad }}, {{ user?.direccion }}</p>
+        </div>
+      </div>
+    </div>
+  
+    <div class="account-menu">
+      <!-- Configuración -->
+      <div class="menu-item" routerLink="/configuracion">
+        <div class="menu-icon">
+          <i class="material-icons">settings</i>
+        </div>
+        <div class="menu-text">
+          <h3>Configuración</h3>
+          <p>Gestiona tus preferencias y datos personales</p>
+        </div>
+        <div class="menu-arrow">
+          <i class="material-icons">chevron_right</i>
+        </div>
+      </div>
+  
+      <!-- Mis Reportes -->
+      <div class="menu-item" routerLink="/mis-reportes">
+        <div class="menu-icon">
+          <i class="material-icons">assignment</i>
+        </div>
+        <div class="menu-text">
+          <h3>Mis Reportes</h3>
+          <p>Visualiza y gestiona todos tus reportes</p>
+        </div>
+        <div class="menu-arrow">
+          <i class="material-icons">chevron_right</i>
+        </div>
+      </div>
+  
+      <!-- Crear Reporte -->
+      <div class="menu-item" routerLink="/crear-reporte">
+        <div class="menu-icon">
+          <i class="material-icons">add_circle</i>
+        </div>
+        <div class="menu-text">
+          <h3>Crear Reporte</h3>
+          <p>Reporta una nueva situación en tu comunidad</p>
+        </div>
+        <div class="menu-arrow">
+          <i class="material-icons">chevron_right</i>
+        </div>
+      </div>
+  
+      <!-- Cerrar Sesión -->
+      <div class="menu-item" (click)="logout()">
+        <div class="menu-icon">
+          <i class="material-icons">exit_to_app</i>
+        </div>
+        <div class="menu-text">
+          <h3>Cerrar Sesión</h3>
+          <p>Salir de tu cuenta actual</p>
+        </div>
+        <div class="menu-arrow">
+          <i class="material-icons">chevron_right</i>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Notificación de cierre de sesión -->
+    <div *ngIf="showLogoutNotification" class="logout-notification">
+      Cerrando sesión...
+    </div>
+  </div>

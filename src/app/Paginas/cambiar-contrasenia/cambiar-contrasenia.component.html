@@ -1,1 +1,93 @@
-<p>cambiar-contrasenia works!</p>
+<div class="password-container">
+    <div class="password-card">
+      <h1 class="password-title">Cambiar Contraseña</h1>
+      <p class="password-subtitle">Ingresa tu contraseña actual y la nueva contraseña</p>
+  
+      <form [formGroup]="changePasswordForm" (ngSubmit)="onSubmit()" class="password-form">
+        <!-- Contraseña Actual -->
+        <div class="form-group">
+          <label for="currentPassword">Contraseña Actual</label>
+          <div class="input-container">
+            <input 
+              [type]="showCurrentPassword ? 'text' : 'password'" 
+              id="currentPassword" 
+              formControlName="currentPassword"
+              placeholder="Ingresa tu contraseña actual"
+            >
+            <button type="button" class="toggle-password" (click)="toggleCurrentPasswordVisibility()">
+              <i class="material-icons">{{ showCurrentPassword ? 'visibility_off' : 'visibility' }}</i>
+            </button>
+          </div>
+          <div class="error-message" *ngIf="changePasswordForm.get('currentPassword')?.hasError('required') && changePasswordForm.get('currentPassword')?.touched">
+            La contraseña actual es requerida
+          </div>
+        </div>
+  
+        <!-- Nueva Contraseña -->
+        <div class="form-group">
+          <label for="newPassword">Nueva Contraseña</label>
+          <div class="input-container">
+            <input 
+              [type]="showNewPassword ? 'text' : 'password'" 
+              id="newPassword" 
+              formControlName="newPassword"
+              placeholder="Ingresa tu nueva contraseña"
+            >
+            <button type="button" class="toggle-password" (click)="toggleNewPasswordVisibility()">
+              <i class="material-icons">{{ showNewPassword ? 'visibility_off' : 'visibility' }}</i>
+            </button>
+          </div>
+          <div class="password-strength" [class.weak]="passwordStrength === 'weak'" 
+                                    [class.medium]="passwordStrength === 'medium'" 
+                                    [class.strong]="passwordStrength === 'strong'">
+            <div class="strength-bar"></div>
+            <span class="strength-text">{{ getPasswordStrengthText() }}</span>
+          </div>
+          <div class="error-message" *ngIf="changePasswordForm.get('newPassword')?.hasError('required') && changePasswordForm.get('newPassword')?.touched">
+            La nueva contraseña es requerida
+          </div>
+          <div class="error-message" *ngIf="changePasswordForm.get('newPassword')?.hasError('minlength') && changePasswordForm.get('newPassword')?.touched">
+            La contraseña debe tener al menos 8 caracteres
+          </div>
+        </div>
+  
+        <!-- Confirmar Nueva Contraseña -->
+        <div class="form-group">
+          <label for="confirmPassword">Confirmar Nueva Contraseña</label>
+          <div class="input-container">
+            <input 
+              [type]="showConfirmPassword ? 'text' : 'password'" 
+              id="confirmPassword" 
+              formControlName="confirmPassword"
+              placeholder="Confirma tu nueva contraseña"
+            >
+            <button type="button" class="toggle-password" (click)="toggleConfirmPasswordVisibility()">
+              <i class="material-icons">{{ showConfirmPassword ? 'visibility_off' : 'visibility' }}</i>
+            </button>
+          </div>
+          <div class="error-message" *ngIf="changePasswordForm.get('confirmPassword')?.hasError('required') && changePasswordForm.get('confirmPassword')?.touched">
+            Debes confirmar tu nueva contraseña
+          </div>
+          <div class="error-message" *ngIf="changePasswordForm.hasError('passwordMismatch') && changePasswordForm.get('confirmPassword')?.touched">
+            Las contraseñas no coinciden
+          </div>
+        </div>
+  
+        <!-- Botón de Envío -->
+        <button type="submit" class="submit-button" [disabled]="changePasswordForm.invalid || isLoading">
+          <span *ngIf="!isLoading">Cambiar Contraseña</span>
+          <span *ngIf="isLoading" class="spinner"></span>
+        </button>
+  
+        <!-- Mensajes de Retroalimentación -->
+        <div *ngIf="successMessage" class="success-message">
+          <i class="material-icons">check_circle</i>
+          {{ successMessage }}
+        </div>
+        <div *ngIf="errorMessage" class="error-message">
+          <i class="material-icons">error</i>
+          {{ errorMessage }}
+        </div>
+      </form>
+    </div>
+  </div>

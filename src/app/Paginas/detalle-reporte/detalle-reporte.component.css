@@ -1,0 +1,119 @@
+/* Estilo Apple para el diálogo */
+.apple-dialog {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #1d1d1f;
+  max-width: 600px;
+}
+
+h2.mat-dialog-title {
+  font-size: 22px;
+  font-weight: 600;
+  padding: 20px 24px 16px;
+  margin: 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.mat-dialog-content {
+  padding: 24px !important;
+  margin: 0;
+}
+
+.detail-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.detalle-fila {
+  display: flex;
+  align-items: center;
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.detalle-etiqueta {
+  font-weight: 500;
+  color: #86868b;
+  min-width: 120px;
+}
+
+h3 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 20px 0 12px;
+}
+
+.descripcion-text {
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0;
+  color: #1d1d1f;
+}
+
+/* Galería de imágenes */
+.galeria-imagenes {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.imagen-miniatura {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.imagen-miniatura:hover {
+  transform: scale(1.03);
+}
+
+/* Badges de estado */
+.estado-badge {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.estado-badge.pendiente {
+  background-color: #ffd54f;
+  color: #5e4200;
+}
+
+.estado-badge.verificado {
+  background-color: #66bb6a;
+  color: #1b5e20;
+}
+
+.estado-badge.rechazado {
+  background-color: #ef5350;
+  color: #b71c1c;
+}
+
+.estado-badge.resuelto {
+  background-color: #42a5f5;
+  color: #0d47a1;
+}
+
+/* Botón de cerrar */
+.apple-close-button {
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  margin: 0 8px 8px 0;
+}
+
+.apple-close-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.mat-divider {
+  margin: 16px 0 !important;
+  border-top-color: rgba(0, 0, 0, 0.08) !important;
+}
