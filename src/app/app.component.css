@@ -1,148 +1,216 @@
-/* app.component.css */
-/* Estilo inspirado en Apple - Minimalista y elegante */
-:root {
-    --apple-white: #f5f5f7;
-    --apple-black: #1d1d1f;
-    --apple-gray: #86868b;
-    --apple-light-gray: #e8e8ed;
-    --apple-blue: #0066cc;
-    --apple-hover-gray: #f5f5f7;
+/* Estilos generales */
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f4; /* Un gris claro de fondo */
+  color: #333; /* Texto principal oscuro */
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.apple-style-container {
+  max-width: 1200px;
+  margin: 40px auto;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  overflow: hidden; /* Para que el border-radius funcione con los elementos internos */
+}
+
+/* Estilos del encabezado */
+.apple-header {
+  background-color: #eee; /* Un gris muy claro para el header */
+  padding: 20px 30px;
+  border-bottom: 1px solid #ddd;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 1.8em;
+  font-weight: 600;
+  color: #333;
+  margin: 0;
+}
+
+/* Estilos de la navegación principal */
+.main-nav {
+  /* No es necesario un background aquí, ya está dentro del header */
+}
+
+.nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+.nav-link {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #555;
+  font-size: 1em;
+  transition: color 0.3s ease;
+}
+
+.nav-link:hover {
+  color: #007aff; /* El azul característico de Apple para los enlaces activos/hover */
+}
+
+.nav-link.active {
+  color: #007aff;
+  font-weight: 500;
+}
+
+/* Estilos del submenú */
+.sub-nav-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-top: none;
+  border-radius: 0 0 4px 4px;
+  position: absolute; /* Para que se superponga si es necesario */
+  z-index: 10; /* Asegura que esté por encima de otros elementos */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  display: none; /* Oculto por defecto, se mostrará con JavaScript/CSS al hacer hover o clic */
+}
+
+.nav-list li:hover > .sub-nav-list {
+  display: block; /* Mostrar al hacer hover sobre el elemento padre */
+}
+
+.sub-nav-list li a {
+  display: block;
+  padding: 10px 20px;
+  text-decoration: none;
+  color: #555;
+  font-size: 0.95em;
+  transition: background-color 0.3s ease;
+}
+
+.sub-nav-list li a:hover {
+  background-color: #e9e9e9;
+  color: #007aff;
+}
+
+/* Estilos del contenido principal */
+.apple-main {
+  padding: 30px;
+}
+
+/* Estilos del pie de página */
+.apple-footer {
+  background-color: #f4f4f4;
+  padding: 20px 30px;
+  border-top: 1px solid #ddd;
+  text-align: center;
+  color: #777;
+  font-size: 0.9em;
+}
+
+.footer-content {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.footer-links a {
+  color: #777;
+  text-decoration: none;
+  margin: 0 10px;
+}
+
+.footer-links a:hover {
+  color: #007aff;
+}
+
+/* Estilos adicionales para mejorar la apariencia */
+button,
+input[type="submit"],
+input[type="button"] {
+  background-color: #007aff;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover,
+input[type="submit"]:hover,
+input[type="button"]:hover {
+  background-color: #0059b3;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+  margin-bottom: 10px;
+  width: calc(100% - 22px); /* Ajuste para el padding y el borde */
+}
+
+/* Responsive design (opcional, pero recomendado) */
+@media (max-width: 768px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
   }
-  
-  .apple-style-container {
-    font-family: -apple-system, BlinkMacSystemFont, 'San Francisco', 'Segoe UI', Roboto, sans-serif;
-    color: var(--apple-black);
-    line-height: 1.5;
-    min-height: 100vh;
-    display: flex;
+
+  .main-nav {
+    margin-top: 15px;
+  }
+
+  .nav-list {
     flex-direction: column;
   }
-  
-  .apple-header {
-    background-color: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--apple-light-gray);
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-  }
-  
-  .header-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 22px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .logo {
-    font-weight: 600;
-    font-size: 24px;
-    margin: 0;
-    padding: 15px 0;
-  }
-  
-  .main-nav {
-    display: flex;
-  }
-  
-  .nav-list {
-    display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    gap: 2px;
-  }
-  
+
   .nav-link {
-    color: var(--apple-black);
-    text-decoration: none;
-    font-size: 14px;
-    font-weight: 400;
-    padding: 16px 15px;
-    border-radius: 18px;
-    transition: all 0.3s ease;
-    display: inline-block;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
   }
-  
-  .nav-link:hover {
-    background-color: var(--apple-hover-gray);
-    color: var(--apple-blue);
+
+  .nav-link:last-child {
+    border-bottom: none;
   }
-  
-  .nav-link.active {
-    color: var(--apple-blue);
-    font-weight: 500;
+
+  .sub-nav-list {
+    position: static;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    box-shadow: none;
+    margin-top: 5px;
+    display: none; /* Ocultar en pantallas pequeñas inicialmente */
   }
-  
-  .apple-main {
-    flex: 1;
-    padding: 40px 22px;
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
+
+  .nav-list li:hover > .sub-nav-list {
+    display: block;
   }
-  
-  .apple-footer {
-    background-color: var(--apple-white);
-    border-top: 1px solid var(--apple-light-gray);
-    padding: 20px 0;
+
+  .sub-nav-list li a {
+    padding-left: 30px;
   }
-  
-  .footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 22px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
+
   .footer-links {
     display: flex;
-    gap: 20px;
+    flex-direction: column;
+    align-items: center;
   }
-  
+
   .footer-links a {
-    color: var(--apple-gray);
-    text-decoration: none;
-    font-size: 12px;
+    margin: 5px 0;
   }
-  
-  .footer-links a:hover {
-    text-decoration: underline;
-    color: var(--apple-blue);
-  }
-  
-  /* Efecto de hover suave */
-  @media (prefers-reduced-motion: no-preference) {
-    .nav-link {
-      transition: all 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
-    }
-  }
-  
-  /* Responsive */
-  @media (max-width: 768px) {
-    .header-content {
-      flex-direction: column;
-      padding: 10px;
-    }
-    
-    .nav-list {
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 5px;
-    }
-    
-    .nav-link {
-      padding: 10px 12px;
-      font-size: 13px;
-    }
-    
-    .footer-content {
-      flex-direction: column;
-      gap: 10px;
-    }
-  }
+}

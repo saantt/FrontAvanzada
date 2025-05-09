@@ -95,6 +95,21 @@ export class ReportService {
   marcarResuelto(id: string): Observable<void> {
     return this.http.patch<void>(`${this.apiUrl}/reportes/${id}/resuelto`, {}); // Ajusta la ruta de tu API
   }
+  getAllReports(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/admin`);
+  }
+
+  verifyReport(reportId: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${reportId}/verify`, {});
+  }
+
+  rejectReport(reportId: string, reason: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${reportId}/reject`, { reason });
+  }
+
+  markAsResolved(reportId: string): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${reportId}/resolve`, {});
+  }
 
   // Add other methods as needed (e.g., create, edit, delete)
 }

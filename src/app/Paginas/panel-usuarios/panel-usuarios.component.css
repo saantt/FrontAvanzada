@@ -1,0 +1,73 @@
+.admin-container {
+    padding: 24px;
+  }
+  
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  .controls {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+  }
+  
+  .table-container {
+    overflow-x: auto;
+    position: relative;
+    min-height: 200px;
+  }
+  
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  
+  /* Badges styles */
+  .role-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  
+  .role-badge.admin {
+    background-color: #e3f2fd;
+    color: #1565c0;
+  }
+  
+  .role-badge.user {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+  
+  .status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+  }
+  
+  .status-badge.active {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+  }
+  
+  .status-badge.inactive {
+    background-color: #ffebee;
+    color: #c62828;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .toolbar {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 15px;
+    }
+  }

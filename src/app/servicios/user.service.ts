@@ -26,4 +26,19 @@ export class UserService {
   eliminarUsuario(id: string): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/usuarios/${id}`); // Ajusta la ruta de tu API
   }
+   // Obtener todos los usuarios
+   getAllUsers(): Observable<any[]> {
+    return this.http.get<any[]>(this.apiUrl);
+  }
+
+  // Actualizar estado de un usuario
+  updateUserStatus(userId: string, active: boolean): Observable<any> {
+    return this.http.patch(`${this.apiUrl}/${userId}/status`, { active });
+  }
+
+  // Eliminar un usuario (opcional)
+  deleteUser(userId: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${userId}`);
+  }
+
 }

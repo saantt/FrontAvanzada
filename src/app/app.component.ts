@@ -11,4 +11,6 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 export class AppComponent {
   title = 'Proyecto-Programacion-Avanzada';
   footer = 'Universidad del Quindío - 2025-1';
+  isLoggedIn: boolean = false;
+  isAdmin: boolean = false;
 }

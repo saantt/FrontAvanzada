@@ -1,39 +1,38 @@
-<!-- app.component.html -->
 <div class="apple-style-container">
   <header class="apple-header">
     <div class="header-content">
       <h1 class="logo">{{ title }}</h1>
       <nav class="main-nav">
         <ul class="nav-list">
-          <!-- Navegación principal -->
           <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">Inicio</a></li>
-          
-          <!-- Autenticación -->
+
           <li><a routerLink="/login" routerLinkActive="active" class="nav-link">Login</a></li>
           <li><a routerLink="/registro" routerLinkActive="active" class="nav-link">Registro</a></li>
           <li><a routerLink="/recuperar-contrasenia" routerLinkActive="active" class="nav-link">Recuperar Contraseña</a></li>
           <li><a routerLink="/activacion-cuenta" routerLinkActive="active" class="nav-link">Activación</a></li>
-          
-          <!-- Usuario -->
-          <li><a routerLink="/cuenta" routerLinkActive="active" class="nav-link">Mi Cuenta</a></li>
-          <li><a routerLink="/configuracion" routerLinkActive="active" class="nav-link">Configuración</a></li>
-          <li><a routerLink="/cambiar-contrasenia" routerLinkActive="active" class="nav-link">Cambiar Contraseña</a></li>
-          <li><a routerLink="/borrar-cuenta" routerLinkActive="active" class="nav-link">Borrar Cuenta</a></li>
-          
-          <!-- Reportes -->
-          <li><a routerLink="/formulario" routerLinkActive="active" class="nav-link">Nuevo Reporte</a></li>
-          <li><a routerLink="/reportes" routerLinkActive="active" class="nav-link">Reportes</a></li>
-          <li><a routerLink="/mis-reportes" routerLinkActive="active" class="nav-link">Mis Reportes</a></li>
-          <li><a routerLink="/comentarios" routerLinkActive="active" class="nav-link">Comentarios</a></li>
-          <li><a routerLink="/notificaciones" routerLinkActive="active" class="nav-link">Notificaciones</a></li>
-          
-          <!-- Admin -->
-          <li><a routerLink="/inicio-admin" routerLinkActive="active" class="nav-link">Admin</a></li>
-          <li><a routerLink="/cuenta-admin" routerLinkActive="active" class="nav-link">Cuenta Admin</a></li>
-          <li><a routerLink="/panel-usuarios" routerLinkActive="active" class="nav-link">Usuarios</a></li>
-          <li><a routerLink="/ver-reportes-admin" routerLinkActive="active" class="nav-link">Reportes Admin</a></li>
-          <li><a routerLink="/gestion-reportes" routerLinkActive="active" class="nav-link">Gestión</a></li>
-          <li><a routerLink="/generar-informes" routerLinkActive="active" class="nav-link">Informes</a></li>
+
+          <li *ngIf="isLoggedIn">
+            <a routerLink="/cuenta" routerLinkActive="active" class="nav-link">Mi Cuenta</a>
+            <ul class="sub-nav-list">
+              <li><a routerLink="/configuracion" routerLinkActive="active" class="nav-link">Configuración</a></li>
+              <li><a routerLink="/reportes" routerLinkActive="active" class="nav-link">Reportes</a></li>
+              <li><a routerLink="/formulario" routerLinkActive="active" class="nav-link">Crear Reporte</a></li>
+              <li><a routerLink="/cerrar-sesion" routerLinkActive="active" class="nav-link">Cerrar Sesión</a></li>
+            </ul>
+          </li>
+
+          <li *ngIf="!isLoggedIn"><a routerLink="/reportes" routerLinkActive="active" class="nav-link">Reportes</a></li>
+          <li *ngIf="!isLoggedIn"><a routerLink="/formulario" routerLinkActive="active" class="nav-link">Nuevo Reporte</a></li>
+          <li *ngIf="!isLoggedIn"><a routerLink="/mis-reportes" routerLinkActive="active" class="nav-link">Mis Reportes</a></li>
+          <li *ngIf="!isLoggedIn"><a routerLink="/comentarios" routerLinkActive="active" class="nav-link">Comentarios</a></li>
+          <li *ngIf="!isLoggedIn"><a routerLink="/notificaciones" routerLinkActive="active" class="nav-link">Notificaciones</a></li>
+
+          <li *ngIf="isAdmin"><a routerLink="/inicio-admin" routerLinkActive="active" class="nav-link">Admin</a></li>
+          <li *ngIf="isAdmin"><a routerLink="/cuenta-admin" routerLinkActive="active" class="nav-link">Cuenta Admin</a></li>
+          <li *ngIf="isAdmin"><a routerLink="/panel-usuarios" routerLinkActive="active" class="nav-link">Usuarios</a></li>
+          <li *ngIf="isAdmin"><a routerLink="/ver-reportes-admin" routerLinkActive="active" class="nav-link">Reportes Admin</a></li>
+          <li *ngIf="isAdmin"><a routerLink="/gestion-reportes" routerLinkActive="active" class="nav-link">Gestión</a></li>
+          <li *ngIf="isAdmin"><a routerLink="/generar-informes" routerLinkActive="active" class="nav-link">Informes</a></li>
         </ul>
       </nav>
     </div>

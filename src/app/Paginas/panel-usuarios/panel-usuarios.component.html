@@ -1,1 +1,87 @@
-<p>panel-usuarios works!</p>
+<div class="admin-container">
+    <div class="toolbar">
+      <h2>Gestión de Usuarios</h2>
+      <div class="controls">
+        <mat-form-field appearance="outline">
+          <mat-label>Buscar usuario</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Nombre, email, etc.">
+          <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+      </div>
+    </div>
+  
+    <div class="table-container">
+      <mat-table [dataSource]="dataSource" matSort>
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+          <mat-cell *matCellDef="let user"> {{user._id | slice:0:8}}... </mat-cell>
+        </ng-container>
+  
+        <!-- Name Column -->
+        <ng-container matColumnDef="name">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+          <mat-cell *matCellDef="let user"> {{user.name}} </mat-cell>
+        </ng-container>
+  
+        <!-- Email Column -->
+        <ng-container matColumnDef="email">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+          <mat-cell *matCellDef="let user"> {{user.email}} </mat-cell>
+        </ng-container>
+  
+        <!-- Role Column -->
+        <ng-container matColumnDef="role">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Rol </mat-header-cell>
+          <mat-cell *matCellDef="let user">
+            <span class="role-badge {{user.role}}">{{user.role}}</span>
+          </mat-cell>
+        </ng-container>
+  
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Estado </mat-header-cell>
+          <mat-cell *matCellDef="let user">
+            <span class="status-badge {{user.active ? 'active' : 'inactive'}}">
+              {{user.active ? 'Activo' : 'Inactivo'}}
+            </span>
+          </mat-cell>
+        </ng-container>
+  
+        <!-- Created At Column -->
+        <ng-container matColumnDef="createdAt">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Registro </mat-header-cell>
+          <mat-cell *matCellDef="let user"> {{user.createdAt | date:'mediumDate'}} </mat-cell>
+        </ng-container>
+  
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef> Acciones </mat-header-cell>
+          <mat-cell *matCellDef="let user">
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>more_vert</mat-icon>
+            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="toggleUserStatus(user)">
+                <mat-icon>{{user.active ? 'toggle_off' : 'toggle_on'}}</mat-icon>
+                <span>{{user.active ? 'Desactivar' : 'Activar'}}</span>
+              </button>
+              <button mat-menu-item (click)="deleteUser(user._id)" color="warn">
+                <mat-icon>delete</mat-icon>
+                <span>Eliminar</span>
+              </button>
+            </mat-menu>
+          </mat-cell>
+        </ng-container>
+  
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+      </mat-table>
+  
+      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+  
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner diameter="50"></mat-spinner>
+      </div>
+    </div>
+  </div>
