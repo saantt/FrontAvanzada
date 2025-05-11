@@ -1,3 +1,4 @@
+<!--
 <div class="admin-container">
     <h1 class="page-title">Panel de Administración</h1>
   
@@ -12,7 +13,7 @@
         />
         <div class="filter-options">
           <label class="filter-label">Filtrar por:</label>
-          <select (change)="filtrarUsuarios($event)" class="filter-select">
+          <select (change)="onUsuarioFilterChange($event)" class="filter-select">
             <option value="todos">Todos</option>
             <option value="activos">Activos</option>
             <option value="inactivos">Inactivos</option>
@@ -116,3 +117,4 @@
       <div *ngIf="reportesFiltrados.length === 0" class="no-data">No se han encontrado reportes.</div>
     </section>
   </div>
+-->

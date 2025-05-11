@@ -36,7 +36,7 @@ export class FormularioComponent implements OnInit {
       'Ibagué'
     ];
     // Asigna el accessToken directamente a la propiedad del objeto mapboxgl
-    (mapboxgl as any).accessToken = environment.mapboxToken;
+    //(mapboxgl as any).accessToken = environment.mapboxToken;
   }
 
   ngOnInit() {

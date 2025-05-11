@@ -35,11 +35,16 @@ interface RecoverResponse {
 @Injectable({
   providedIn: 'root'
 })
+
 export class AuthService {
-  private apiUrl = 'http://localhost:3000/api/auth'; // Ajusta según tu backend
+  private apiUrl = 'http://localhost:8080/api/'; // Ajusta según tu backend
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
   private jwtHelper = new JwtHelperService();
+
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
 
   constructor(private http: HttpClient, private router: Router) {
     this.currentUserSubject = new BehaviorSubject<User | null>(
@@ -87,7 +92,7 @@ export class AuthService {
 
   // Login de usuario
   login(email: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { email, password }).pipe(
+    return this.http.post<LoginResponse>(`${this.apiUrl}auth/iniciar-sesion`, { email, password }).pipe(
       map(response => {
         if (response.token && response.user) {
           localStorage.setItem('currentUser', JSON.stringify(response.user));

@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-
+import { AuthService } from '../../servicios/auth.service';
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [ReactiveFormsModule,CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
@@ -16,13 +17,15 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
-    });
-  }
+      });
+    }
+
 
   onSubmit() {
     if (this.loginForm.invalid) {
@@ -32,19 +35,19 @@ export class LoginComponent {
     this.loading = true;
     this.errorMessage = '';
 
-    // Simulación de autenticación (reemplazar con llamada real a tu API)
-    setTimeout(() => {
-      const { email, password } = this.loginForm.value;
-      
-      // Credenciales de ejemplo (en un caso real, verificarías contra tu backend)
-      if (email === 'usuario@ejemplo.com' && password === '123456') {
-        // Login exitoso - redirigir al dashboard/home
-        this.router.navigate(['/dashboard']);
-      } else {
-        this.errorMessage = 'Credenciales incorrectas';
+    const { email, password } = this.loginForm.value;
+
+    this.authService.login(email, password).subscribe({
+      next: () => {
+        this.router.navigate(['/reportes']);
+      },
+      error: (err) => {
+        this.errorMessage = err.message || 'Error en el login';
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
       }
-      
-      this.loading = false;
-    }, 1000);
+    });
   }
 }
