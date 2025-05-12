@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { AbstractControlOptions, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService } from '../../servicios/auth.service';
 
 @Component({
   imports: [ReactiveFormsModule, CommonModule],
@@ -12,7 +13,7 @@ export class RegistroComponent {
   ciudades: string[];
   registroForm!: FormGroup;
 
-  constructor(private formBuilder: FormBuilder) {
+  constructor(private authService: AuthService, private formBuilder: FormBuilder) {
     this.ciudades = ['Armenia', 'Bogota', 'Cali', 'Cartagena', 'Cúcuta', 'Ibagué'];
     this.crearFormulario();
   }
@@ -48,8 +49,23 @@ export class RegistroComponent {
   }
   registrar() {
     if (this.registroForm.valid) {
-      console.log(this.registroForm.value);
-      // Aquí iría tu lógica de registro
+      const formData = this.registroForm.value;
+      const userData = {
+        nombre: formData.nombre,
+        telefono: formData.telefono,
+        ciudad: formData.ciudad,
+        direccion: formData.direccion,
+        email: formData.email,
+        password: formData.password
+      };
+      this.authService.register(userData).subscribe({
+        next: (response) => {
+          console.log('Registro exitoso:', response);
+        },
+        error: (error) => {
+          console.error('Error en el registro:', error);
+        }
+      });
     }
   }
 }

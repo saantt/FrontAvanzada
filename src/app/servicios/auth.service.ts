@@ -20,6 +20,9 @@ interface User {
 interface LoginResponse {
   token: string;
   user: User;
+  respuesta: {
+    token: string;
+  };
 }
 
 interface RegisterResponse {
@@ -37,10 +40,11 @@ interface RecoverResponse {
 })
 
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api/'; // Ajusta según tu backend
+  private apiUrl = 'http://localhost:8080/api'; // Ajusta según tu backend
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
   private jwtHelper = new JwtHelperService();
+  public authStatus: BehaviorSubject<boolean>;
 
   getToken(): string | null {
     return localStorage.getItem('token');
@@ -51,6 +55,7 @@ export class AuthService {
       JSON.parse(localStorage.getItem('currentUser') || 'null')
     );
     this.currentUser = this.currentUserSubject.asObservable();
+    this.authStatus = new BehaviorSubject(this.isLoggedIn);
   }
 
   public get currentUserValue(): User | null {
@@ -58,7 +63,8 @@ export class AuthService {
   }
 
   public get isLoggedIn(): boolean {
-    return !!this.currentUserValue && !this.jwtHelper.isTokenExpired();
+    const token = this.getToken();
+    return !!token && !this.jwtHelper.isTokenExpired(token);
   }
 
   public get isAdmin(): boolean {
@@ -78,7 +84,7 @@ export class AuthService {
     email: string;
     password: string;
   }): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>(`${this.apiUrl}/register`, userData).pipe(
+    return this.http.post<RegisterResponse>(`${this.apiUrl}/usuarios`, userData).pipe(
       catchError(this.handleError)
     );
   }
@@ -92,12 +98,11 @@ export class AuthService {
 
   // Login de usuario
   login(email: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}auth/iniciar-sesion`, { email, password }).pipe(
+    return this.http.post<LoginResponse>(`${this.apiUrl}/auth/iniciar-sesion`, { email, password }).pipe(
       map(response => {
-        if (response.token && response.user) {
-          localStorage.setItem('currentUser', JSON.stringify(response.user));
-          localStorage.setItem('token', response.token);
-          this.currentUserSubject.next(response.user);
+        if (response.respuesta.token) {
+          localStorage.setItem('token', response.respuesta.token);
+          this.authStatus.next(true);
         }
         return response;
       }),
@@ -107,9 +112,9 @@ export class AuthService {
 
   // Logout
   logout() {
-    localStorage.removeItem('currentUser');
     localStorage.removeItem('token');
     this.currentUserSubject.next(null);
+    this.authStatus.next(false);
     this.router.navigate(['/login']);
   }
 
