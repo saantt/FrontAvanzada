@@ -26,8 +26,7 @@ interface LoginResponse {
 }
 
 interface RegisterResponse {
-  message: string;
-  userId: string;
+  respuesta: string;
 }
 
 interface RecoverResponse {
@@ -85,16 +84,26 @@ export class AuthService {
     password: string;
   }): Observable<RegisterResponse> {
     return this.http.post<RegisterResponse>(`${this.apiUrl}/usuarios`, userData).pipe(
+      map(response => {
+        const message = response.respuesta;
+        if (message.includes("Registro exitoso")) {
+          this.router.navigate(['/activacion-cuenta']);
+        }
+        return response;
+      }),
       catchError(this.handleError)
     );
   }
 
   // Activación de cuenta
-  activateAccount(userId: string, activationCode: string): Observable<{ message: string }> {
-    return this.http.post<{ message: string }>(`${this.apiUrl}/activate`, { userId, activationCode }).pipe(
-      catchError(this.handleError)
-    );
-  }
+    activateAccount(email: string, codigoValidacion: string): Observable<{ message: string }> {
+      return this.http.put<{ message: string }>(`${this.apiUrl}/usuarios/${email}/activar`, { codigoValidacion, email }).pipe(
+        map(response => {
+            return response;
+        }),
+        catchError(this.handleError)
+      );
+    }
 
   // Login de usuario
   login(email: string, password: string): Observable<LoginResponse> {
