@@ -3,6 +3,7 @@ import { OnInit } from '@angular/core';
 import { ReportService } from '../../servicios/report.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import * as mapboxgl from 'mapbox-gl';
 
 @Component({
   selector: 'app-reportes',
@@ -46,16 +47,18 @@ export class ReportesComponent implements OnInit {
   }
 
   showReportDetails(reportId: string): void {
-    this.reportService.getReportById(reportId).subscribe({
-      next: (data) => {
-        this.selectedReport = data;
-      },
-      error: (error) => {
-        console.error('Error fetching report details:', error);
-        // Handle error
-      },
-    });
-  }
+  this.reportService.getReportById(reportId).subscribe({
+    next: (data) => {
+      this.selectedReport = data;
+      setTimeout(() => {
+        this.initMap(this.selectedReport.latitud, this.selectedReport.longitud);
+      }, 0); // Espera a que Angular renderice el div
+    },
+    error: (error) => {
+      console.error('Error fetching report details:', error);
+    },
+  });
+}
 
   closeReportDetails(): void {
     this.selectedReport = null;
@@ -96,5 +99,18 @@ export class ReportesComponent implements OnInit {
         },
       });
     }
+  }
+
+  initMap(lat: number, lng: number): void {
+  const map = new mapboxgl.Map({
+    container: 'mapbox', // ID del div
+    style: 'mapbox://styles/mapbox/streets-v11',
+    center: [lng, lat],
+    zoom: 14
+  });
+
+  new mapboxgl.Marker()
+    .setLngLat([lng, lat])
+    .addTo(map);
   }
 }

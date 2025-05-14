@@ -1,43 +1,31 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import * as mapboxgl from 'mapbox-gl';
 import { environment } from './enviroment'; // Asegúrate de tener este archivo
+
+declare var mapboxgl: any; // Esto declara la variable global
 
 @Component({
   selector: 'app-formulario',
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './formulario.component.html',
-  styleUrl: './formulario.component.css'
+  styleUrls: ['./formulario.component.css']
 })
 export class FormularioComponent implements OnInit {
   @ViewChild('mapContainer') mapContainer!: ElementRef;
   map!: mapboxgl.Map;
   crearReporteForm!: FormGroup;
-  categorias: string[];
-  ciudades: string[];
+  categorias: string[] = [
+    'Mascota Perdida', 'Robo', 'Alumbrado público', 'Huecos en la vía'
+  ];
+  ciudades: string[] = [
+    'Bogotá', 'Cali', 'Cartagena', 'Armenia', 'Ibagué'
+  ];
   lat: number = 4.604858;
   lng: number = -74.060364;
   zoom: number = 12;
 
-  constructor(private formBuilder: FormBuilder) {
-    this.categorias = [
-      'Mascota Perdida',
-      'Robo',
-      'Alumbrado público',
-      'Huecos en la vía'
-    ];
-
-    this.ciudades = [
-      'Bogotá',
-      'Cali',
-      'Cartagena',
-      'Armenia',
-      'Ibagué'
-    ];
-    // Asigna el accessToken directamente a la propiedad del objeto mapboxgl
-    //(mapboxgl as any).accessToken = environment.mapboxToken;
-  }
+  constructor(private formBuilder: FormBuilder) {}
 
   ngOnInit() {
     this.crearFormulario();
@@ -61,6 +49,9 @@ export class FormularioComponent implements OnInit {
   }
 
   initMap() {
+    // Asignar el token a la variable global
+    (mapboxgl as any).accessToken = environment.mapboxToken;
+
     this.map = new mapboxgl.Map({
       container: this.mapContainer.nativeElement,
       style: 'mapbox://styles/mapbox/streets-v11',
@@ -101,8 +92,7 @@ export class FormularioComponent implements OnInit {
 
   onFileChange(event: any) {
     if (event.target.files.length > 0) {
-      const files = event.target.files;
-      const file = files[0];
+      const file = event.target.files[0];
       this.crearReporteForm.get('imagen')?.setValue(file);
     }
   }

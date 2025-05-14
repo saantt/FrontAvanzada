@@ -1,89 +1,71 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import mapboxgl, { LngLatLike } from 'mapbox-gl';
-/* import { ReporteDTO } from '../dto/reporte-dto'; */
-
+import mapboxgl, { LngLatLike, Marker, Popup } from 'mapbox-gl';
 
 @Injectable({
- providedIn: 'root'
+  providedIn: 'root'
 })
 export class MapaService {
+  mapa!: mapboxgl.Map;
+  marcadores: Marker[] = [];
+  posicionActual: LngLatLike = [-75.67270, 4.53252]; // Ibagué
+  accessToken = 'pk.eyJ1IjoibWlsdG9uZ29tZXoiLCJhIjoiY21hbmF5bmc1MGJ6dTJscHVva240d2gyYSJ9.FGf4B1c6iia2KC3DT5LaLw';
 
+  constructor() {
+    (mapboxgl as any).accessToken = this.accessToken;
+  }
 
- mapa: any;
- marcadores: any[];
- posicionActual: LngLatLike;
+  public crearMapa(containerId: string = 'mapa'): void {
+    this.mapa = new mapboxgl.Map({
+      container: containerId,
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: this.posicionActual,
+      zoom: 15,
+      pitch: 45
+    });
 
+    this.mapa.addControl(new mapboxgl.NavigationControl());
+    this.mapa.addControl(
+      new mapboxgl.GeolocateControl({
+        positionOptions: { enableHighAccuracy: true },
+        trackUserLocation: true
+      })
+    );
+  }
 
- constructor() {
-   this.marcadores = [];
-   this.posicionActual = [-75.67270, 4.53252];
- }
+  public agregarMarcador(): Observable<{ lng: number; lat: number }> {
+    return new Observable(observer => {
+      this.mapa.on('click', (e) => {
+        this.eliminarMarcadores();
 
+        const marcador = new mapboxgl.Marker()
+          .setLngLat(e.lngLat)
+          .addTo(this.mapa);
 
- public crearMapa() {
-   this.mapa = new mapboxgl.Map({
-     accessToken: 'COPIAR ACCESS TOKEN AQUÍ',
-     container: 'mapa',
-     style: 'mapbox://styles/mapbox/standard',
-     center: this.posicionActual,
-     pitch: 45,
-     zoom: 17
-   });
+        this.marcadores.push(marcador);
+        observer.next({ lng: e.lngLat.lng, lat: e.lngLat.lat });
+      });
+    });
+  }
 
+  public pintarMarcadores(reportes: any[]): void {
+    reportes.forEach(reporte => {
+      const popup = new mapboxgl.Popup()
+        .setHTML(`<h3>${reporte.titulo}</h3><p>${reporte.descripcion}</p>`);
 
-   this.mapa.addControl(new mapboxgl.NavigationControl());
-   this.mapa.addControl(
-     new mapboxgl.GeolocateControl({
-       positionOptions: { enableHighAccuracy: true },
-       trackUserLocation: true
-     })
-   );
+      new mapboxgl.Marker()
+        .setLngLat([reporte.ubicacion.longitud, reporte.ubicacion.latitud])
+        .setPopup(popup)
+        .addTo(this.mapa);
+    });
+  }
 
+  private eliminarMarcadores(): void {
+    this.marcadores.forEach(marker => marker.remove());
+    this.marcadores = [];
+  }
 
- }
-
-
- public agregarMarcador(): Observable<any> {
-
-
-   const mapaGlobal = this.mapa;
-   const marcadores = this.marcadores;
-
-
-   return new Observable<any>(observer => {
-
-
-     mapaGlobal.on('click', function (e: any) {
-       marcadores.forEach(marcador => marcador.remove());
-
-
-       const marcador = new mapboxgl.Marker()
-         .setLngLat([e.lngLat.lng, e.lngLat.lat])
-         .addTo(mapaGlobal);
-
-
-       marcadores.push(marcador);
-       observer.next(marcador.getLngLat());
-     });
-   });
-
-
- }
-
-
- /* public pintarMarcadores(reportes: ReporteDTO[]) {
-
-
-   reportes.forEach(reporte => {
-     new mapboxgl.Marker()
-       .setLngLat([reporte.ubicacion.longitud, reporte.ubicacion.latitud])
-       .setPopup(new mapboxgl.Popup().setHTML(reporte.titulo))
-       .addTo(this.mapa);
-   });
-
-
- }
- */
-
+  public obtenerMapa(): mapboxgl.Map {
+    return this.mapa;
+  }
 }

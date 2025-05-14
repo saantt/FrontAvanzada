@@ -21,7 +21,7 @@
           <li *ngIf="isLoggedIn"><a routerLink="/borrar-cuenta" routerLinkActive="active" class="nav-link">Borrar Cuenta</a></li>
           
           <!-- Reportes -->
-          <li *ngIf="isLoggedIn"><a routerLink="/formulario" routerLinkActive="active" class="nav-link">Nuevo Reporte</a></li>
+          <li *ngIf="!isLoggedIn"><a routerLink="/formulario" routerLinkActive="active" class="nav-link">Nuevo Reporte</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/reportes" routerLinkActive="active" class="nav-link">Reportes</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/mis-reportes" routerLinkActive="active" class="nav-link">Mis Reportes</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/comentarios" routerLinkActive="active" class="nav-link">Comentarios</a></li>
