@@ -6,7 +6,7 @@
       <nav class="main-nav">
         <ul class="nav-list">
           <!-- Navegación principal -->
-          <li><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">Inicio</a></li>
+          <li *ngIf="!isLoggedIn"><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">Inicio</a></li>
           
           <!-- Autenticación -->
           <li *ngIf="!isLoggedIn"><a routerLink="/login" routerLinkActive="active" class="nav-link">Login</a></li>
@@ -16,9 +16,8 @@
           
           <!-- Usuario -->
           <li *ngIf="isLoggedIn"><a routerLink="/cuenta" routerLinkActive="active" class="nav-link">Mi Cuenta</a></li>
-          <li *ngIf="isLoggedIn"><a routerLink="/configuracion" routerLinkActive="active" class="nav-link">Configuración</a></li>
-          <li *ngIf="isLoggedIn"><a routerLink="/cambiar-contrasenia" routerLinkActive="active" class="nav-link">Cambiar Contraseña</a></li>
-          <li *ngIf="isLoggedIn"><a routerLink="/borrar-cuenta" routerLinkActive="active" class="nav-link">Borrar Cuenta</a></li>
+          <!-- <li *ngIf="isLoggedIn"><a routerLink="/cambiar-contrasenia" routerLinkActive="active" class="nav-link">Cambiar Contraseña</a></li> -->
+          <!-- <li *ngIf="isLoggedIn"><a routerLink="/borrar-cuenta" routerLinkActive="active" class="nav-link">Borrar Cuenta</a></li> -->
           
           <!-- Reportes -->
           <li *ngIf="isLoggedIn"><a routerLink="/formulario" routerLinkActive="active" class="nav-link">Nuevo Reporte</a></li>
@@ -37,6 +36,7 @@
           <li *ngIf="isLoggedIn"><a routerLink="/ver-reportes-admin" routerLinkActive="active" class="nav-link">Reportes Admin</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/gestion-reportes" routerLinkActive="active" class="nav-link">Gestión</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/generar-informes" routerLinkActive="active" class="nav-link">Informes</a></li>
+          <li *ngIf="isLoggedIn"><a routerLink="/configuracion" routerLinkActive="active" class="nav-link">Configuración</a></li>
         </ul>
       </nav>
     </div>
