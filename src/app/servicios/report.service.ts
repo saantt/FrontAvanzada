@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../Paginas/formulario/enviroment';
@@ -9,9 +9,22 @@ import { Reporte } from '../interfaces/reporte.interface'; // Asegúrate de crea
   providedIn: 'root',
 })
 export class ReportService {
-  private apiUrl = environment.apiUrl; // Ajusta según tu backend
+  private apiUrl = 'http://localhost:8080/api/reportes'; // Ajusta según tu backend
 
   constructor(private http: HttpClient) { }
+
+  private getAuthHeaders(): { headers: HttpHeaders } {
+  const token = localStorage.getItem('token');
+  return {
+    headers: new HttpHeaders({
+      'Authorization': `Bearer ${token}`
+    })
+  };
+}
+
+  crearReporte(reporte: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, reporte, this.getAuthHeaders());
+  }
 
   private handleError(error: HttpErrorResponse) {
     let errorMessage = 'Ocurrió un error desconocido';

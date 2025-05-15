@@ -1,0 +1,183 @@
+* {
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+form {
+  max-width: 450px;
+  margin: 30px auto;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 32px;
+  color: #1c1c1e;
+  font-weight: 600;
+}
+
+div {
+  margin-bottom: 24px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #3a3a3c;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #d1d1d6;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  font-size: 16px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+input:focus,
+select:focus {
+  border-color: #007aff;
+  outline: none;
+  background-color: #fff;
+  box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.15);
+}
+
+button[type="submit"] {
+  width: 100%;
+  padding: 14px;
+  background-color: #007aff;
+  border: none;
+  border-radius: 14px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button[type="submit"]:hover {
+  background-color: #005ecb;
+}
+
+button[type="submit"]:disabled {
+  background-color: #a3c1f5;
+  cursor: not-allowed;
+}
+
+.error-message {
+  margin-top: 6px;
+  color: #ff3b30;
+  font-size: 13px;
+}
+
+.botones-edicion {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-actualizar {
+  flex: 1;
+  padding: 14px;
+  background-color: #34c759;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-actualizar:hover {
+  background-color: #28a745;
+}
+
+.btn-eliminar {
+  flex: 1;
+  padding: 14px;
+  background-color: #ff3b30;
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-eliminar:hover {
+  background-color: #e03128;
+}
+
+.lista-categorias {
+  max-width: 450px;
+  margin: 30px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 14px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+}
+
+.lista-categorias h3 {
+  margin-bottom: 16px;
+  text-align: center;
+  color: #1c1c1e;
+}
+
+.lista-categorias ul {
+  list-style: none;
+  padding: 0;
+}
+
+.lista-categorias li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f9f9f9;
+  margin-bottom: 10px;
+  padding: 12px 16px;
+  border-radius: 12px;
+}
+
+.lista-categorias li span {
+  font-size: 16px;
+}
+
+.lista-categorias button {
+  margin-left: 10px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.lista-categorias button:first-of-type {
+  background-color: #007aff;
+  color: white;
+}
+
+.lista-categorias button:last-of-type {
+  background-color: #ff3b30;
+  color: white;
+}
+
+.btn-cancelar {
+  background-color: #d1d1d6;
+  color: #1c1c1e;
+  margin-left: 10px;
+}
+
+/* Añadido para que el formulario se vea bien en móviles */
+@media (max-width: 500px) {
+  form {
+    padding: 24px;
+    border-radius: 16px;
+  }
+}

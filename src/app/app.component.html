@@ -21,12 +21,15 @@
           <li *ngIf="isLoggedIn"><a routerLink="/borrar-cuenta" routerLinkActive="active" class="nav-link">Borrar Cuenta</a></li>
           
           <!-- Reportes -->
-          <li *ngIf="!isLoggedIn"><a routerLink="/formulario" routerLinkActive="active" class="nav-link">Nuevo Reporte</a></li>
+          <li *ngIf="isLoggedIn"><a routerLink="/formulario" routerLinkActive="active" class="nav-link">Nuevo Reporte</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/reportes" routerLinkActive="active" class="nav-link">Reportes</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/mis-reportes" routerLinkActive="active" class="nav-link">Mis Reportes</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/comentarios" routerLinkActive="active" class="nav-link">Comentarios</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/notificaciones" routerLinkActive="active" class="nav-link">Notificaciones</a></li>
-          
+
+          <!-- Categorias Admin -->
+           <li *ngIf="isLoggedIn"><a routerLink="/categoria" routerLinkActive="active" class="nav-link">Categoria</a></li>
+
           <!-- Admin -->
           <li *ngIf="isLoggedIn"><a routerLink="/inicio-admin" routerLinkActive="active" class="nav-link">Admin</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/cuenta-admin" routerLinkActive="active" class="nav-link">Cuenta Admin</a></li>

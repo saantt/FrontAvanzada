@@ -1,8 +1,12 @@
 export interface Reporte {
-    id: string;
-    titulo: string;
-    categoria: string;
-    fecha: Date;
-    estado: string; // 'Pendiente', 'Verificado', 'Rechazado', 'Resuelto'
-    // Otros campos relevantes para tu modelo de reporte
+  titulo: string;
+  descripcion: string;
+  clienteId: string;
+  ubicacion: {
+    latitud: number;
+    longitud: number;
+  };
+  categoriaId: string;
+  importante: boolean;
+  fotos: string[]; // O puedes usar `File[]` y convertirlas
   }

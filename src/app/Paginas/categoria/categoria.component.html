@@ -1,0 +1,33 @@
+<form [formGroup]="formularioCategoria" (ngSubmit)="guardarCategoria()" novalidate>
+  <h2>Gestión de Categoría</h2>
+
+  <div>
+    <label for="nombre">Nombre</label>
+    <input type="text" id="nombre" formControlName="nombre" placeholder="Nombre de la categoría">
+  </div>
+
+  <div>
+    <label for="icono">Ícono</label>
+    <input type="text" id="icono" formControlName="icono" placeholder="Ej: 🛡️, 🐶, 🎉">
+  </div>
+
+  <button *ngIf="!editando" type="submit" [disabled]="formularioCategoria.invalid">Guardar Categoría</button>
+
+  <div *ngIf="editando" class="botones-edicion">
+    <button type="submit" class="btn-actualizar">Actualizar</button>
+    <button type="button" class="btn-eliminar" (click)="eliminarCategoria(formularioCategoria.value.id)">Eliminar</button>
+    <button type="button" class="btn-cancelar" (click)="cancelarEdicion()">Cancelar</button>
+  </div>
+</form>
+
+<!-- Lista de categorías -->
+<div class="lista-categorias" *ngIf="categorias.length > 0">
+  <h3>Categorías Registradas</h3>
+  <ul>
+    <li *ngFor="let cat of categorias">
+      <span>{{ cat.icono }} {{ cat.nombre }}</span>
+      <button (click)="editarCategoria(cat)">Editar</button>
+      <button (click)="eliminarCategoria(cat.id!)">Eliminar</button>
+    </li>
+  </ul>
+</div>

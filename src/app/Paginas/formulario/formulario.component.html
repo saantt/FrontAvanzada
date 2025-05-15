@@ -3,45 +3,37 @@
   <form [formGroup]="crearReporteForm" (ngSubmit)="crearReporte()">
 
     <div>
-      <label>Título: </label>
-      <input type="text" formControlName="titulo" />
+      <label for="titulo">Título:</label>
+      <input id="titulo" type="text" formControlName="titulo" />
     </div>
 
     <div>
-      <label>Categoría: </label>
-      <select formControlName="categoria">
-        <option value="">Seleccione una categoría</option>
-        <option *ngFor="let item of categorias" [value]="item">{{item}}</option>
+      <label for="categoria">Categoría:</label>
+      <select id="categoria" formControlName="categoria" required>
+        <option value="" disabled selected>Seleccione una categoría</option>
+        <option *ngFor="let c of categorias" [value]="c.id">{{ c.nombre }}</option>
       </select>
     </div>
 
     <div>
-      <label>Descripción: </label>
-      <textarea formControlName="descripcion"></textarea>
-    </div>
-
-    <div>
-      <label>Ciudad: </label>
-      <select formControlName="ciudad">
-        <option value="">Seleccione una ciudad</option>
-        <option *ngFor="let item of ciudades" [value]="item">{{item}}</option>
-      </select>
+      <label for="descripcion">Descripción:</label>
+      <textarea id="descripcion" formControlName="descripcion"></textarea>
     </div>
 
     <div id="map" #mapContainer class="map-container"></div>
     <label class="map-label">Haz clic o arrastra el marcador para seleccionar la ubicación</label>
 
     <div>
-      <label>Ubicación: </label>
+      <label>Ubicación:</label>
       <input type="text" formControlName="ubicacion" readonly />
     </div>
 
     <div>
-      <label>Imagen reporte: </label>
+      <label>Imagen del reporte:</label>
       <input type="file" (change)="onFileChange($event)" />
     </div>
 
-    <button type="submit">Crear reporte</button>
+    <button type="submit" [disabled]="crearReporteForm.invalid">Crear reporte</button>
 
   </form>
 </div>

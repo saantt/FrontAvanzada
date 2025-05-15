@@ -25,7 +25,6 @@ export class RegistroComponent {
         Validators.required, 
         Validators.pattern(/^[0-9]{10}$/)
       ]],
-      ciudad: ['', [Validators.required]],
       direccion: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],     
       password: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]],

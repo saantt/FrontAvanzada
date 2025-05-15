@@ -19,6 +19,9 @@ import { MisReportesComponent } from './Paginas/mis-reportes/mis-reportes.compon
 import { ComentariosComponent } from './Paginas/comentarios/comentarios.component';
 import { NotificacionesComponent } from './Paginas/notificaciones/notificaciones.component';
 
+// Category
+import { CategoriaComponent } from './Paginas/categoria/categoria.component';
+
 // Admin specific components
 import { InicioAdminComponent } from './Paginas/inicio-admin/inicio-admin.component';
 import { CuentaAdminComponent } from './Paginas/cuenta-admin/cuenta-admin.component';
@@ -52,7 +55,10 @@ export const routes: Routes = [
   { path: 'mis-reportes', component: MisReportesComponent },
   { path: 'comentarios', component: ComentariosComponent },
   { path: 'notificaciones', component: NotificacionesComponent },
-  
+
+  //Category
+  { path: 'categoria', component: CategoriaComponent },
+
   // Admin routes
   { path: 'inicio-admin', component: InicioAdminComponent },
   { path: 'cuenta-admin', component: CuentaAdminComponent },

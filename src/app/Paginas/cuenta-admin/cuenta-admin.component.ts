@@ -91,7 +91,7 @@ export class CuentaAdminComponent implements OnInit {
         .toLowerCase()
         .includes(this.terminoBusquedaReportes.toLowerCase());
       const filtroEstado =
-        filtro === 'todos' || reporte.estado.toLowerCase() === filtro;
+        filtro === 'todos'; //|| reporte.estado.toLowerCase() === filtro;
       return tituloCoincide && filtroEstado;
     });
   }
