@@ -10,7 +10,7 @@ import { AuthService } from '../../servicios/auth.service';
   templateUrl: './activacion-cuenta.component.html',
   styleUrl: './activacion-cuenta.component.css'
 })
-export class ActivacionCuentaComponent {
+export class ActivacionCuentaComponent implements OnInit {
   activationForm: FormGroup;
   email: string = '';
   countdown: number = 900; // 15 minutos en segundos

@@ -127,9 +127,19 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  // Recuperación de contraseña
+  // envío de código al correo
   recoverPassword(email: string): Observable<RecoverResponse> {
-    return this.http.post<RecoverResponse>(`${this.apiUrl}/recover-password`, { email }).pipe(
+    return this.http.post<RecoverResponse>(`${this.apiUrl}/usuarios/codigoVerificacion`, { email }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  // modificación de contraseña
+  validateCodeAndResetPassword(email: string, codigoValidacion: string, nuevaPassword: string): Observable<{ message: string }> {
+    return this.http.put<{ message: string }>(`${this.apiUrl}/usuarios/${email}/password`, { codigoValidacion, email, nuevaPassword }).pipe(
+      map(response => {
+          return response;
+      }),
       catchError(this.handleError)
     );
   }

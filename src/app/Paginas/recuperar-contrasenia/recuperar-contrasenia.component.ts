@@ -21,10 +21,17 @@ import { provideHttpClient } from '@angular/common/http';
   styleUrls: ['./recuperar-contrasenia.component.css']
 })
 export class RecuperarContraseniaComponent implements OnInit {
+  isResetting = false;
+
   recoverForm: FormGroup;
   isLoading = false;
   successMessage = '';
   errorMessage = '';
+
+  resetForm: FormGroup;
+  isResetLoad = false;
+  resetSuccessMessage = '';
+  resetErrorMessage = '';
 
   constructor(
     private fb: FormBuilder,
@@ -33,6 +40,16 @@ export class RecuperarContraseniaComponent implements OnInit {
   ) {
     this.recoverForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
+    });
+    this.resetForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      code: ['', [
+        Validators.required,
+        Validators.minLength(5),
+        Validators.maxLength(5),
+        Validators.pattern('^[0-9]*$')
+      ]],
+      newPassword: ['', [Validators.required, Validators.minLength(8)]],
     });
   }
 
@@ -63,13 +80,44 @@ export class RecuperarContraseniaComponent implements OnInit {
       .subscribe(response => {
         if (response) {
           this.successMessage = 'Se ha enviado un correo con instrucciones para restablecer tu contraseña.';
+          this.resetForm.patchValue(email);
+          this.isResetting = true;
+          this.resetForm.get('email')?.setValue(this.recoverForm.get('email')?.value);
           this.recoverForm.reset();
-          
-          // Opcional: Redirigir después de 3 segundos
-          setTimeout(() => {
-            this.router.navigate(['/login']);
-          }, 3000);
         }
       });
+  }
+
+  // Envío de código para recuperar contraseña
+  onSubmitReset(): void {
+    if (this.resetForm.invalid) {
+      return;
+    }
+    this.isResetLoad = true;
+    this.successMessage = '';
+    this.resetErrorMessage = '';
+
+    if (this.resetForm.valid) {
+      const { email, code, newPassword } = this.resetForm.value;
+      this.authService.validateCodeAndResetPassword(email, code, newPassword)
+      .pipe(
+        catchError(error => {
+          this.resetErrorMessage = 'Ocurrió un error al enviar el correo. Por favor intenta nuevamente.';
+          return of(null);
+        }),
+        finalize(() => {
+          this.isResetLoad = false;
+        })
+      )
+      .subscribe(response =>{
+        if (response) {
+          this.successMessage = 'Contraseña cambiada exitosamente';
+          this.isResetLoad = true;
+          setTimeout(() => {
+            this.router.navigate(['/login']);
+          }, 2000);
+        }
+      });
+    }
   }
 }
