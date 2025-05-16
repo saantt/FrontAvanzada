@@ -8,22 +8,35 @@ import { environment } from '../Paginas/formulario/enviroment';
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = environment.apiUrl; // Replace with your actual backend API URL
+  private apiUrl = 'http://localhost:8080/api/usuarios'; // Ajusta según tu backend
 
   constructor(private http: HttpClient) {}
 
-  getCurrentUser(): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/users/profile`); // Or the appropriate endpoint
+  private obtenerClienteIdDesdeToken(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+ 
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.sub || payload.id || null; // depende de cómo generaste el JWT
+    } catch (e) {
+      return null;
+    }
   }
 
+  getCurrentUser(): Observable<any> {
+  const userId = this.obtenerClienteIdDesdeToken();
+  return this.http.get<any>(`${this.apiUrl}/${userId}`);
+}
+
   updateUser(userData: any): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/users/profile`, userData); // Or the appropriate endpoint
+    return this.http.put<any>(`${this.apiUrl}/${userData.id}`, userData); // Or the appropriate endpoint
   }
   getUsuarios(): Observable<Usuario[]> {
-    return this.http.get<Usuario[]>(`${this.apiUrl}/usuarios`); // Ajusta la ruta de tu API
+    return this.http.get<Usuario[]>(`${this.apiUrl}`); // Ajusta la ruta de tu API
   }
 
   eliminarUsuario(id: string): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/usuarios/${id}`); // Ajusta la ruta de tu API
+    return this.http.delete<void>(`${this.apiUrl}/${id}`); // Ajusta la ruta de tu API
   }
 }

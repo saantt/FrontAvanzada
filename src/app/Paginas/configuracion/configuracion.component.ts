@@ -6,13 +6,14 @@ import { FormsModule, NgModel, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
+  standalone: true,
   selector: 'app-configuracion',
-  imports: [ReactiveFormsModule, CommonModule,FormsModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule],
   templateUrl: './configuracion.component.html',
-  styleUrl: './configuracion.component.css'
+  styleUrls: ['./configuracion.component.css']
 })
 export class ConfiguracionComponent implements OnInit{
-  userData: any = { nombre: '', ciudad: '', telefono: '', direccion: '', email: '' }; // Initialize with empty values
+  userData: any = { nombre: '', ciudad: '', telefono: '' }; 
   currentPassword = '';
   newPassword = '';
   confirmPassword = '';
@@ -20,7 +21,7 @@ export class ConfiguracionComponent implements OnInit{
 
   constructor(
     private authService: AuthService,
-    private userService: UserService, // Inject User Service
+    private userService: UserService,
     private router: Router
   ) {}
 
@@ -28,59 +29,62 @@ export class ConfiguracionComponent implements OnInit{
     this.loadUserData();
   }
 
-  loadUserData(): void {
-    this.userService.getCurrentUser().subscribe({  // Use User Service to get user data
-      next: (data) => {
-        this.userData = data;
-      },
-      error: (error) => {
-        console.error('Error fetching user data:', error);
-        // Handle error (e.g., show a message to the user)
-      },
-    });
+  private obtenerClienteIdDesdeToken(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+ 
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.sub || payload.id || null;
+    } catch (e) {
+      return null;
+    }
   }
 
-  updateProfile(): void {
-    this.userService.updateUser(this.userData).subscribe({  // Use User Service to update
+  loadUserData(): void {
+  this.userService.getCurrentUser().subscribe({ 
+    next: (data) => {
+      console.log('Usuario cargado:', data);
+      this.userData.nombre = data.respuesta.nombre;
+      this.userData.ciudad = data.respuesta.ciudad;
+      this.userData.telefono = data.respuesta.telefono;
+    },
+    error: (error) => {
+      console.error('Error fetching user data:', error);
+    },
+  });
+  }
+
+
+   updateProfile(): void {
+    const userId = this.obtenerClienteIdDesdeToken();
+    this.userService.updateUser({ ...this.userData, id: userId }).subscribe({
       next: (response) => {
-        console.log('Profile updated successfully', response);
-        // Optionally, show a success message to the user
+        alert('Perfil actualizado correctamente.');
       },
       error: (error) => {
         console.error('Error updating profile', error);
-        // Handle error
-      },
-    });
-  }
-
-  changePassword(): void {
-    if (this.newPassword !== this.confirmPassword) {
-      this.passwordMismatch = true;
-      return;
-    }
-    this.passwordMismatch = false;
-
-    const passwordData = {
-      currentPassword: this.currentPassword,
-      newPassword: this.newPassword,
-    };
-
-    this.authService.changePassword(passwordData.currentPassword, passwordData.newPassword).subscribe({
-      next: (response) => {
-        console.log('Password changed successfully', response);
-        // Optionally, show a success message and clear the form
-        this.currentPassword = '';
-        this.newPassword = '';
-        this.confirmPassword = '';
-      },
-      error: (error) => {
-        console.error('Error changing password', error);
-        // Handle error (e.g., show error message returned from the server)
       },
     });
   }
 
   openDeleteAccountConfirmation(): void {
-    this.router.navigate(['/delete-account']); // Navigate to the delete account page
+  if (confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción es irreversible.')) {
+    const userId = this.obtenerClienteIdDesdeToken();
+    if (userId) {
+      this.userService.eliminarUsuario(userId).subscribe({
+        next: () => {
+          alert('Cuenta eliminada correctamente.');
+          this.authService.logout();
+          this.router.navigate(['/login']);
+        },
+        error: (error: any) => {
+          console.error('Error eliminando la cuenta:', error);
+        }
+      });
+    } else {
+      alert('No se pudo obtener el ID del usuario. Intenta iniciar sesión nuevamente.');
+    }
   }
+}
 }
