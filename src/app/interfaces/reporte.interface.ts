@@ -1,4 +1,5 @@
 export interface Reporte {
+  id: string;
   titulo: string;
   descripcion: string;
   clienteId: string;

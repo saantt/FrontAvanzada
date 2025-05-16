@@ -40,7 +40,7 @@ export class ReportService {
   }
 
   getReports(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}`).pipe(
+    return this.http.get<any[]>(`${this.apiUrl}`,this.getAuthHeaders()).pipe(
       map((response: any) => {
         //  Manejar diferentes estructuras de respuesta
         if (Array.isArray(response.respuesta)) {

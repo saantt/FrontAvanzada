@@ -17,26 +17,6 @@
           </div>
         </div>
       </div>
-  
-      <div class="image-section">
-        <label class="file-upload">
-          <input 
-            type="file" 
-            accept="image/*" 
-            (change)="onFileChange($event)"
-            hidden
-          >
-          <span class="upload-button">Subir imagen</span>
-        </label>
-        
-        <div *ngIf="previewImage" class="image-preview">
-          <img [src]="previewImage" alt="Vista previa">
-          <button type="button" (click)="removeImage()" class="remove-image">
-            &times;
-          </button>
-        </div>
-      </div>
-  
       <button 
         type="submit" 
         class="submit-button"

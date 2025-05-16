@@ -1,56 +1,23 @@
-<div class="apple-dialog">
-  <h2 mat-dialog-title>{{data.reporte?.titulo}}</h2>
+<div class="container">
+  <h2>Crear comentario</h2>
 
-  <mat-dialog-content>
-    <div *ngIf="data.reporte" class="detail-container">
-      <div class="detalle-fila">
-        <span class="detalle-etiqueta">Categoría:</span>
-        <span>{{data.reporte.categoria}}</span>
-      </div>
+  <mat-form-field appearance="fill" style="width: 100%;">
+    <mat-label>Seleccionar Reporte</mat-label>
+    <mat-select [(value)]="selectedReporteId">
+      <mat-option *ngFor="let reporte of reportes" [value]="reporte.id">
+        {{ reporte.titulo || 'Reporte sin título' }}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
 
-      <div class="detalle-fila">
-        <span class="detalle-etiqueta">Estado:</span>
-        <span class="estado-badge {{data.reporte.estado}}">
-          {{data.reporte.estado | titlecase}}
-        </span>
-      </div>
+  <form [formGroup]="commentForm" (ngSubmit)="enviarComentario()" *ngIf="selectedReporteId">
+    <mat-form-field appearance="fill" style="width: 100%;">
+      <mat-label>Comentario</mat-label>
+      <textarea matInput formControlName="comentario" rows="4"></textarea>
+    </mat-form-field>
 
-      <div class="detalle-fila">
-        <span class="detalle-etiqueta">Fecha:</span>
-        <span>{{data.reporte.fecha | date:'mediumDate'}}</span>
-      </div>
-
-      <div class="detalle-fila">
-        <span class="detalle-etiqueta">Usuario:</span>
-        <span>{{data.reporte.usuario}}</span>
-      </div>
-
-      <div class="detalle-fila">
-        <span class="detalle-etiqueta">Ubicación:</span>
-        <span>{{data.reporte.ubicacion}}</span>
-      </div>
-
-      <mat-divider></mat-divider>
-
-      <h3>Descripción Completa</h3>
-      <p class="descripcion-text">{{data.reporte.descripcion}}</p>
-
-      <mat-divider *ngIf="data.reporte.imagenes?.length"></mat-divider>
-
-      <h3 *ngIf="data.reporte.imagenes?.length">Imágenes Adjuntas</h3>
-      <div class="galeria-imagenes">
-        <img 
-          *ngFor="let img of data.reporte.imagenes" 
-          [src]="img.url" 
-          [alt]="'Imagen del reporte ' + data.reporte.titulo"
-          (click)="ampliarImagen(img.url)"
-          class="imagen-miniatura"
-        >
-      </div>
-    </div>
-  </mat-dialog-content>
-
-  <mat-dialog-actions align="end">
-    <button mat-button (click)="cerrar()" class="apple-close-button">Cerrar</button>
-  </mat-dialog-actions>
+    <button mat-raised-button color="primary" type="submit" [disabled]="commentForm.invalid">
+      Enviar Comentario
+    </button>
+  </form>
 </div>

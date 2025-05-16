@@ -1,65 +1,55 @@
+import { Component, Input } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { ComentarioService } from '../../servicios/comentario.service';
+import { AuthService } from '../../servicios/auth.service';
+import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-
-
 @Component({
   selector: 'app-comentarios',
-  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './comentarios.component.html',
-  styleUrl: './comentarios.component.css'
+  styleUrl: './comentarios.component.css',
+  standalone: true,
+  imports: [CommonModule,
+    ReactiveFormsModule,
+    FormsModule]
 })
 export class ComentariosComponent {
   @Input() reportId!: string;
-  @Output() commentSubmitted = new EventEmitter<any>();
 
-  commentForm: any;
+  commentForm: ReturnType<FormBuilder['group']>;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private comentarioService: ComentarioService,
+    private authService: AuthService
+  ) {
     this.commentForm = this.fb.group({
-      text: ['', [Validators.required, Validators.maxLength(500)]],
-      image: [null as File | null]
+      text: ['', [Validators.required, Validators.maxLength(500)]]
     });
   }
 
-  previewImage: string | ArrayBuffer | null = null;
-
- 
-
-  onFileChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      this.commentForm.patchValue({ image: file });
-
-      // Generar vista previa
-      const reader = new FileReader();
-      reader.onload = () => this.previewImage = reader.result;
-      reader.readAsDataURL(file);
-    }
-  }
-
-  removeImage() {
-    this.commentForm.patchValue({ image: null });
-    this.previewImage = null;
-  }
-
   onSubmit() {
-    if (this.commentForm.valid) {
-      const commentData = {
-        reportId: this.reportId,
-        text: this.commentForm.value.text!,
-        image: this.commentForm.value.image
-      };
+    if (this.commentForm.invalid) return;
 
-      // Emitir el comentario al componente padre
-      this.commentSubmitted.emit(commentData);
-      
-      // Resetear el formulario
-      this.commentForm.reset();
-      this.previewImage = null;
-      
-      console.log('Comentario simulado:', commentData);
+    const clienteId = this.authService.getUserIdFromToken();
+    if (!clienteId) {
+      console.error("Usuario no autenticado");
+      return;
     }
+
+    const comentario = {
+      mensaje: this.commentForm.value.text!,
+      clienteId: clienteId
+    };
+
+    this.comentarioService.crearComentario(this.reportId, comentario).subscribe({
+      next: () => {
+        this.commentForm.reset();
+        console.log("Comentario enviado correctamente");
+      },
+      error: (err) => {
+        console.error("Error al enviar comentario:", err);
+      }
+    });
   }
 }

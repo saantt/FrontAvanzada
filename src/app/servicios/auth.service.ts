@@ -74,6 +74,18 @@ export class AuthService {
     return this.currentUserValue?.role === 'moderator';
   }
 
+  getUserIdFromToken(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+ 
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.sub || payload.id || null; // depende de cómo generaste el JWT
+    } catch (e) {
+      return null;
+    }
+  }
+
   // Registro de usuario
   register(userData: {
     nombre: string;

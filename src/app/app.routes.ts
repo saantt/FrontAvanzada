@@ -32,6 +32,7 @@ import { GenerarInformesComponent } from './Paginas/generar-informes/generar-inf
 
 // Core pages
 import { InicioComponent } from './Paginas/inicio/inicio.component';
+import { DetalleReporteComponent } from './Paginas/detalle-reporte/detalle-reporte.component';
 
 export const routes: Routes = [
   // Core routes
@@ -54,6 +55,7 @@ export const routes: Routes = [
   { path: 'reportes', component: ReportesComponent },
   { path: 'mis-reportes', component: MisReportesComponent },
   { path: 'comentarios', component: ComentariosComponent },
+  { path: 'detalle-reporte', component: DetalleReporteComponent },
   { path: 'notificaciones', component: NotificacionesComponent },
 
   //Category
