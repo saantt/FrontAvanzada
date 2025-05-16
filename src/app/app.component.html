@@ -9,10 +9,10 @@
           <li *ngIf="!isLoggedIn"><a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" class="nav-link">Inicio</a></li>
           
           <!-- Autenticación -->
-          <li *ngIf="!isLoggedIn"><a routerLink="/login" routerLinkActive="active" class="nav-link">Login</a></li>
-          <li *ngIf="!isLoggedIn"><a routerLink="/registro" routerLinkActive="active" class="nav-link">Registro</a></li>
+          <li *ngIf="!isLoggedIn"><a routerLink="/login" routerLinkActive="active" class="nav-link">Iniciar sesión</a></li>
+          <li *ngIf="!isLoggedIn"><a routerLink="/registro" routerLinkActive="active" class="nav-link">Registrarse</a></li>
           <li *ngIf="!isLoggedIn"><a routerLink="/recuperar-contrasenia" routerLinkActive="active" class="nav-link">Recuperar Contraseña</a></li>
-          <li *ngIf="!isLoggedIn"><a routerLink="/activacion-cuenta" routerLinkActive="active" class="nav-link">Activación</a></li>
+          <li *ngIf="!isLoggedIn"><a routerLink="/activacion-cuenta" routerLinkActive="active" class="nav-link">Activar cuenta</a></li>
           
           <!-- Usuario -->
           <li *ngIf="isLoggedIn"><a routerLink="/cuenta" routerLinkActive="active" class="nav-link">Mi Cuenta</a></li>
@@ -20,24 +20,31 @@
           <!-- <li *ngIf="isLoggedIn"><a routerLink="/borrar-cuenta" routerLinkActive="active" class="nav-link">Borrar Cuenta</a></li> -->
           
           <!-- Reportes -->
-          <li *ngIf="isLoggedIn"><a routerLink="/formulario" routerLinkActive="active" class="nav-link">Nuevo Reporte</a></li>
-          <li *ngIf="isLoggedIn"><a routerLink="/reportes" routerLinkActive="active" class="nav-link">Reportes</a></li>
-          <li *ngIf="isLoggedIn"><a routerLink="/mis-reportes" routerLinkActive="active" class="nav-link">Mis Reportes</a></li>
+          <li *ngIf="isLoggedIn" class="nav-item-with-dropdown">
+            <a class="nav-link" (click)="toggleReportes()" [class.active]="displayReports">Reportes</a>
+            <ul class="dropdown-menu" *ngIf="displayReports" (click)="toggleReportes()">
+              <li><a routerLink="/reportes" routerLinkActive="active" class="nav-link">Todos los Reportes</a></li>
+              <li><a routerLink="/mis-reportes" routerLinkActive="active" class="nav-link">Mis Reportes</a></li>
+              <li><a routerLink="/formulario" routerLinkActive="active" routerLinkActive="active" class="nav-link">Nuevo Reporte</a></li>
+              <li><a routerLink="/ver-reportes-admin" routerLinkActive="active" class="nav-link">Reportes Admin</a></li>
+            </ul> 
+          </li>
+
           <li *ngIf="isLoggedIn"><a routerLink="/comentarios" routerLinkActive="active" class="nav-link">Comentarios</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/notificaciones" routerLinkActive="active" class="nav-link">Notificaciones</a></li>
 
           <!-- Categorias Admin -->
-           <li *ngIf="isLoggedIn"><a routerLink="/categoria" routerLinkActive="active" class="nav-link">Categoria</a></li>
+           <li *ngIf="isLoggedIn"><a routerLink="/categoria" routerLinkActive="active" class="nav-link">Categoría</a></li>
 
           <!-- Admin -->
-          <li *ngIf="isLoggedIn"><a routerLink="/inicio-admin" routerLinkActive="active" class="nav-link">Admin</a></li>
+          <li *ngIf="isLoggedIn"><a routerLink="/inicio-admin" routerLinkActive="active" class="nav-link">Administrador</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/cuenta-admin" routerLinkActive="active" class="nav-link">Cuenta Admin</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/panel-usuarios" routerLinkActive="active" class="nav-link">Usuarios</a></li>
-          <li *ngIf="isLoggedIn"><a routerLink="/ver-reportes-admin" routerLinkActive="active" class="nav-link">Reportes Admin</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/gestion-reportes" routerLinkActive="active" class="nav-link">Gestión</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/generar-informes" routerLinkActive="active" class="nav-link">Informes</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/configuracion" routerLinkActive="active" class="nav-link">Configuración</a></li>
         </ul>
+        <hr/>
       </nav>
     </div>
   </header>

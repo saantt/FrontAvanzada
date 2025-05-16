@@ -39,7 +39,7 @@ export class LoginComponent {
 
     this.authService.login(email, password).subscribe({
       next: () => {
-        this.router.navigate(['/']);
+        this.router.navigate(['/reportes']);
       },
       error: (err) => {
         this.errorMessage = err.message || 'Error en el login';

@@ -33,23 +33,25 @@
     margin: 0 auto;
     padding: 0 22px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
   }
   
   .logo {
     font-weight: 600;
-    font-size: 24px;
-    margin: 0;
-    padding: 15px 0;
+    font-size: 28px;
+    margin-bottom: 0.5rem;
+    padding: 0px 0;
   }
   
   .main-nav {
-    display: flex;
+    width: 100%;
   }
   
   .nav-list {
     display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
     list-style: none;
     margin: 0;
     padding: 0;
@@ -61,14 +63,15 @@
     text-decoration: none;
     font-size: 14px;
     font-weight: 400;
-    padding: 16px 15px;
+    padding: 12px 15px;
     border-radius: 18px;
     transition: all 0.3s ease;
     display: inline-block;
+    cursor: pointer;
   }
-  
+
   .nav-link:hover {
-    background-color: var(--apple-hover-gray);
+    background-color: rgb(217, 217, 217);
     color: var(--apple-blue);
   }
   
@@ -88,7 +91,7 @@
   .apple-footer {
     background-color: var(--apple-white);
     border-top: 1px solid var(--apple-light-gray);
-    padding: 20px 0;
+    padding: 5px 0;
   }
   
   .footer-content {
@@ -114,6 +117,42 @@
   .footer-links a:hover {
     text-decoration: underline;
     color: var(--apple-blue);
+  }
+
+  /* Ajustes para que el nav quede centrado */
+  .main-nav {
+    width: 100%;
+  }
+
+  /* Menú desplegable */
+  .nav-item-with-dropdown {
+    position: relative;
+  }
+
+  .dropdown-menu {
+    position: absolute;
+    top: 100%;
+    list-style: none; 
+    padding-left: 0;  
+    background-color: white;
+    border: 1px solid  #07070735;
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    min-width: 150px;
+  }
+
+  .dropdown-menu li {
+    width: 100%;
+  }
+
+  .dropdown-menu .nav-link {
+    padding: 10px;
+    display: block;
+    width: 87%;
+    text-align: left;
   }
   
   /* Efecto de hover suave */
@@ -144,5 +183,23 @@
     .footer-content {
       flex-direction: column;
       gap: 10px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .header-content {
+      align-items: center;
+    }
+
+    .dropdown-menu {
+      position: static;
+      box-shadow: none;
+      border: none;
+      background-color: transparent;
+      padding: 0;
+    }
+
+    .dropdown-menu .nav-link {
+      padding: 8px;
     }
   }
