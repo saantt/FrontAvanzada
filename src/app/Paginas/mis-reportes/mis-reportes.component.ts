@@ -1,9 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ReportService } from '../../servicios/report.service';
 import { AuthService } from '../../servicios/auth.service';
+import { ComentarioService } from '../../servicios/comentario.service';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { of, forkJoin } from 'rxjs';
+import { catchError, switchMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-mis-reportes',
@@ -13,11 +16,13 @@ import { CommonModule } from '@angular/common';
 })
 export class MisReportesComponent implements OnInit {
   reports: any[] = [];
+  showSelectedReport: boolean = false;
   selectedReport: any = null;
 
   constructor(
     private reportService: ReportService,
     private authService: AuthService,
+    private commentService: ComentarioService,
     private router: Router
   ) { }
 
@@ -42,11 +47,7 @@ export class MisReportesComponent implements OnInit {
     // const userId = this.authService.currentUserValue?._id; // Use currentUserValue with optional chaining
       this.reportService.getReports().subscribe({
         next: (data) => {
-          console.log(data);
-          
           this.reports = data.filter(data => data.clienteId === this.obtenerClienteIdDesdeToken());
-          console.log(this.reports);
-          
         },
         error: (error) => {
           console.error('Error fetching my reports:', error);
@@ -56,15 +57,40 @@ export class MisReportesComponent implements OnInit {
   }
 
   showReportDetails(reportId: string): void {
-    // this.reportService.getReportById(reportId).subscribe({
-    //   next: (data) => {
-    //     this.selectedReport = data;
-    //   },
-    //   error: (error) => {
-    //     console.error('Error fetching report details:', error);
-    //     // Handle error
-    //   }
-    // });
+    // if (this.selectedReport && this.selectedReport.reporteId === reportId) {
+    //   this.selectedReport = null; // Cierra si ya estaba abierto
+    //   return;
+    // }
+    this.commentService.getComment(reportId).pipe(
+      switchMap((comentarios: any[]) => {
+        const comentariosConUsuario$ = comentarios.map(comentario =>
+          this.authService.getUserComment(comentario.clienteId).pipe(
+            map((usuario: any) => ({
+              ...comentario,
+              nombreCliente: usuario.nombre // o fullName
+            })),
+            // Si falla, igual devuelve el comentario
+            catchError(() => {
+              return of({
+                ...comentario,
+                nombreCliente: 'Desconocido'
+              });
+            })
+          )
+        );
+        return forkJoin(comentariosConUsuario$);
+      })
+    ).subscribe({
+      next: (data) => {
+        this.selectedReport = { reporteId: reportId, comentarios: data };
+        console.log(this.selectedReport);
+        
+      },
+      error: (error) => {
+        console.error('Error fetching report details:', error);
+        // Handle error
+      }
+    });
   }
 
   closeReportDetails(): void {

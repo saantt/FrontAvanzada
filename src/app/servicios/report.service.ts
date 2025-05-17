@@ -45,8 +45,8 @@ export class ReportService {
         //  Manejar diferentes estructuras de respuesta
         if (Array.isArray(response.respuesta)) {
           return response.respuesta;
-        } else if (response && response.data) {
-          return response.data;
+        } else if (response && response.respuesta) {
+          return response.respuesta;
         } else {
           return []; //  Devolver un array vacío por defecto
         }

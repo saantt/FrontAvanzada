@@ -252,6 +252,19 @@ export class AuthService {
     return this.http.get<any>(`${this.apiUrl}/users/profile`); // Or the appropriate endpoint
   }
 
+  getUserComment(idReporte: string): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/usuarios/${idReporte}`).pipe(
+      map((response: any) => {
+        if (response.respuesta) {
+          return response.respuesta;
+        } else {
+          return []; //  Devolver un array vacío por defecto
+        }
+      }),
+      catchError(this.handleError)
+    );
+  }
+
   //  No es necesario getToken() ya que usamos currentUserValue
   getCurrentUserId(): string | null {
     const user = this.currentUserValue;

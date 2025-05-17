@@ -11,7 +11,8 @@
     </div>
   
     <div class="reports-list">
-      <div *ngFor="let report of filteredReports" class="report-item" (click)="showReportDetails(report.id)">
+      <!-- (click)="showReportDetails(report.id) -->
+      <div *ngFor="let report of filteredReports" class="report-item">
         <div class="report-thumbnail">
           <img *ngIf="report.images && report.images.length > 0" [src]="report.images[0]" alt="Report Image">
           <div *ngIf="!report.images || report.images.length === 0" class="no-image">Sin Imagen</div>
@@ -31,7 +32,7 @@
       </div>
     </div>
   
-    <div *ngIf="selectedReport" class="report-details-modal">
+    <!-- <div *ngIf="selectedReport" class="report-details-modal">
       <div class="modal-content">
         <span class="close-button" (click)="closeReportDetails()">&times;</span>
         <h2 class="modal-title">{{ selectedReport.titulo }}</h2>
@@ -53,5 +54,5 @@
           <button (click)="addComment()">Publicar Comentario</button>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>

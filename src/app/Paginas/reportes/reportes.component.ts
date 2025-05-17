@@ -47,7 +47,7 @@ export class ReportesComponent implements OnInit {
     }
   }
 
-  showReportDetails(reportId: string): void {
+  // showReportDetails(reportId: string): void {
     // this.reportService.getReportById(reportId).subscribe({
     //     next: (data) => {
     //       this.selectedReport = data;
@@ -59,7 +59,7 @@ export class ReportesComponent implements OnInit {
     //       console.error('Error fetching report details:', error);
     //     },
     //   });
-  }
+  // }
 
   closeReportDetails(): void {
     // this.selectedReport = null;
