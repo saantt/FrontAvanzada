@@ -3,7 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
-import { AppComponent } from './app.component'; // ✅ ahora está correcto
+import { AppComponent } from './app.component';
 import { JwtInterceptor } from './servicios/auth.interceptor';
 import { AuthService } from './servicios/auth.service';
 

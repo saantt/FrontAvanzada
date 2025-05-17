@@ -12,9 +12,9 @@
           <div *ngIf="!report.images || report.images.length === 0" class="no-image">Sin Imagen</div>
         </div>
         <div class="my-report-details">
-          <h2 class="my-report-title">{{ report.title }}</h2>
-          <p class="my-report-category">{{ report.category }}</p>
-          <p class="my-report-description">{{ report.description  }}</p>
+          <h2 class="my-report-title">{{ report.titulo }}</h2>
+          <p class="my-report-category">{{ report.nombreCategoria }}</p>
+          <p class="my-report-description">{{ report.descripcion  }}</p>
           <div class="my-report-actions">
             <button (click)="showReportDetails(report.id)">Ver Detalles</button>
             <button (click)="editReport(report.id)">Editar</button>

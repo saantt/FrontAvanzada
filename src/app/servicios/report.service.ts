@@ -61,10 +61,12 @@ export class ReportService {
     );
   }
 
-  markReportAsImportant(reportId: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/reports/${reportId}/important`, {}).pipe(
-      catchError(this.handleError)
-    );
+  markReportAsImportant(reportId: any): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${reportId}/importante`, {}, {
+      ...this.getAuthHeaders(),
+       ...this.getAuthHeaders(),
+        responseType: 'text' as 'json'
+    });
   }
 
   addCommentToReport(reportId: string, commentData: any): Observable<any> {

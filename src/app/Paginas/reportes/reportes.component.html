@@ -2,33 +2,56 @@
     <h1 class="title">Reportes de la Comunidad</h1>
   
     <div class="filters-container">
-      <!-- <label for="category-filter">Filtrar por Categoría:</label>
-      <select id="category-filter" [(ngModel)]="selectedCategory" (change)="filterReports()">
-        <option value="">Todas las Categorías</option>
-        <option *ngFor="let category of categories" [value]="category">{{ category }}</option>
-      </select> -->
-    <div class="report-table">
-      <table class="report-table">
-        <thead>
-          <tr>
-            <th>Nombre</th>
-            <th>Categoría</th>
-            <th>Descripción</th>
-            <th>Mapa</th>
-            <th>Importante</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let reporte of reports">
-            <td>{{ reporte.titulo }}</td>
-            <td>{{ reporte.nombreCategoria }}</td>
-            <td>{{ reporte.descripcion }}</td>
-            <td>
-              <a [href]="reporte.mapaUrl" target="_blank">Ver Mapa</a>
-            </td>
-            <td>{{ reporte.importante == 0 ? 'No' : 'Si' }}</td>
-          </tr>
-        </tbody>
-      </table>
+      <label for="important-filter">Prioridad:</label>
+      <select id="important-filter" [(ngModel)]="selectedImportant" (change)="filterReports()">
+        <option value="">Importante</option>
+        <option [value]="1">Si</option>
+        <option [value]="0">NO</option>
+      </select>
+    </div>
+  
+    <div class="reports-list">
+      <div *ngFor="let report of filteredReports" class="report-item" (click)="showReportDetails(report.id)">
+        <div class="report-thumbnail">
+          <img *ngIf="report.images && report.images.length > 0" [src]="report.images[0]" alt="Report Image">
+          <div *ngIf="!report.images || report.images.length === 0" class="no-image">Sin Imagen</div>
+        </div>
+        <div class="report-details">
+          <h2 class="report-title">{{ report.titulo }}</h2>
+          <p class="report-category">{{ report.nombreCategoria }}</p>
+          <p class="report-description">{{ report.descripcion  }}</p>
+          <div class="report-meta">
+            <span class="report-date">{{ report.createdAt | date }}</span>
+            <span class="report-priority">
+              <label class="checkbox-label" for="important-checkbox-{{report.id}}">Importante</label>
+              <input type="checkbox" id="important-checkbox-{{report.id}}" [checked]="report.contadorImportante" (change)="markAsImportant($event, report.id)"/>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <div *ngIf="selectedReport" class="report-details-modal">
+      <div class="modal-content">
+        <span class="close-button" (click)="closeReportDetails()">&times;</span>
+        <h2 class="modal-title">{{ selectedReport.titulo }}</h2>
+        <p class="modal-category">{{ selectedReport.nombreCategoria }}</p>
+        <p class="modal-description">{{ selectedReport.descripcion }}</p>
+        <div class="modal-images">
+          <img *ngFor="let image of selectedReport.images" [src]="image" alt="Report Image">
+        </div>
+        <div class="modal-map" id="mapbox">
+          </div>
+        <div class="modal-comments">
+          <h3>Comentarios</h3>
+          <div *ngFor="let comment of selectedReport.comments" class="comment">
+            <p class="comment-author">{{ comment.author }}</p>
+            <p class="comment-text">{{ comment.text }}</p>
+            <p class="comment-date">{{ comment.createdAt | date }}</p>
+          </div>
+          <textarea [(ngModel)]="newCommentText" placeholder="Escribe un comentario..."></textarea>
+          <button (click)="addComment()">Publicar Comentario</button>
+        </div>
+      </div>
     </div>
   </div>

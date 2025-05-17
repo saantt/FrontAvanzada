@@ -25,35 +25,46 @@ export class MisReportesComponent implements OnInit {
     this.loadMyReports();
   }
 
+  // obtener id del usuario
+  obtenerClienteIdDesdeToken(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+ 
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.sub || payload.id || null; // depende de cómo generaste el JWT
+    } catch (e) {
+      return null;
+    }
+  }
+
   loadMyReports(): void {
-    const userId = this.authService.currentUserValue?._id; // Use currentUserValue with optional chaining
-    if (userId) {
-      this.reportService.getReportsByUser(userId).subscribe({
+    // const userId = this.authService.currentUserValue?._id; // Use currentUserValue with optional chaining
+      this.reportService.getReports().subscribe({
         next: (data) => {
-          this.reports = data;
+          console.log(data);
+          
+          this.reports = data.filter(data => data.clienteId === this.obtenerClienteIdDesdeToken());
+          console.log(this.reports);
+          
         },
         error: (error) => {
           console.error('Error fetching my reports:', error);
           // Handle error (e.g., show an error message)
         }
       });
-    } else {
-      // Handle the case where the user is not authenticated
-      console.warn('User not authenticated.');
-      this.router.navigate(['/login']); // Redirect to login
-    }
   }
 
   showReportDetails(reportId: string): void {
-    this.reportService.getReportById(reportId).subscribe({
-      next: (data) => {
-        this.selectedReport = data;
-      },
-      error: (error) => {
-        console.error('Error fetching report details:', error);
-        // Handle error
-      }
-    });
+    // this.reportService.getReportById(reportId).subscribe({
+    //   next: (data) => {
+    //     this.selectedReport = data;
+    //   },
+    //   error: (error) => {
+    //     console.error('Error fetching report details:', error);
+    //     // Handle error
+    //   }
+    // });
   }
 
   closeReportDetails(): void {
