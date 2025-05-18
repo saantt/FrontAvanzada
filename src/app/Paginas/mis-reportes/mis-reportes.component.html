@@ -26,10 +26,10 @@
 
         <div *ngIf="selectedReport?.reporteId === report.id" class="report-details-comments">
           <h3>Comentarios</h3>
-          <div *ngIf="selectedReport.comentarios.length > 0; else noComments">
+          <div *ngIf="selectedReport.comentarios.length > 0; else noComments" class="comments-scroll">
             <div *ngFor="let comment of selectedReport.comentarios" class="comment-item">
               <strong>{{ comment.nombreCliente }}</strong>
-              <p>- {{ comment.mensaje }}</p>
+              <p>{{ comment.mensaje }}</p>
             </div>
           </div>
           <ng-template #noComments>

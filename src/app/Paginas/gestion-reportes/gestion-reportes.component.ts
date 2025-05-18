@@ -11,14 +11,14 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { DetalleReporteComponent } from '../detalle-reporte/detalle-reporte.component';
+import { ReportService } from '../../servicios/report.service';
 
 interface Report {
-  id: string;
-  title: string;
-  category: string;
+  titulo: string;
+  nombreCategoria: string;
+  fecha: Date;
+  description: string;
   status: 'pending' | 'verified' | 'rejected' | 'resolved';
-  date: Date;
-  user: string;
   location: string;
 }
 
@@ -43,131 +43,63 @@ interface Report {
 })
 export class GestionReportesComponent implements OnInit{
   filterForm: FormGroup;
-  displayedColumns: string[] = ['id', 'title', 'category', 'status', 'date', 'user', 'actions'];
+  displayedColumns: string[] = [ 'title', 'category', 'date', 'description', 'status'];
   dataSource = new MatTableDataSource<Report>();
+  originalData = new MatTableDataSource<Report>();
   selectedReport: Report | null = null;
   rejectionReason: string = '';
 
-  // Datos de ejemplo (en producción vendrían de un servicio)
-  sampleReports: Report[] = [
-    {
-      id: '1',
-      title: 'Bache en calle principal',
-      category: 'Infraestructura',
-      status: 'pending',
-      date: new Date('2023-05-15'),
-      user: 'usuario1@example.com',
-      location: 'Calle 123'
-    },
-    {
-      id: '2',
-      title: 'Robo de bicicleta',
-      category: 'Seguridad',
-      status: 'verified',
-      date: new Date('2023-05-14'),
-      user: 'usuario2@example.com',
-      location: 'Parque central'
-    },
-    {
-      id: '3',
-      title: 'Alumbrado público dañado',
-      category: 'Infraestructura',
-      status: 'rejected',
-      date: new Date('2023-05-13'),
-      user: 'usuario3@example.com',
-      location: 'Avenida siempre viva'
-    }
-  ];
-
-  categories = [
-    'Todos',
-    'Mascota Perdida',
-    'Robo',
-    'Alumbrado público',
-    'Huecos en la vía',
-    'Emergencia médica',
-    'Contaminación'
-  ];
-
-  statuses = [
-    'Todos',
-    'Pendiente',
-    'Verificado',
-    'Rechazado',
-    'Resuelto'
-  ];
-
   constructor(
     private fb: FormBuilder,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private reportService: ReportService
   ) {
     this.filterForm = this.fb.group({
-      search: [''],
-      category: ['Todos'],
-      status: ['Todos'],
       dateFrom: [''],
       dateTo: ['']
     });
   }
 
   ngOnInit(): void {
-    this.dataSource.data = this.sampleReports;
-    this.filterForm.valueChanges.subscribe(() => this.applyFilters());
-  }
-
-  applyFilters(): void {
-    const filters = this.filterForm.value;
-    let filteredData = [...this.sampleReports];
-
-    if (filters.category !== 'Todos') {
-      filteredData = filteredData.filter(report => report.category === filters.category);
-    }
-
-    if (filters.status !== 'Todos') {
-      filteredData = filteredData.filter(report => report.status === filters.status.toLowerCase());
-    }
-
-    if (filters.dateFrom) {
-      const fromDate = new Date(filters.dateFrom);
-      filteredData = filteredData.filter(report => new Date(report.date) >= fromDate);
-    }
-
-    if (filters.dateTo) {
-      const toDate = new Date(filters.dateTo);
-      filteredData = filteredData.filter(report => new Date(report.date) <= toDate);
-    }
-
-    if (filters.search) {
-      const searchTerm = filters.search.toLowerCase();
-      filteredData = filteredData.filter(report => 
-        report.title.toLowerCase().includes(searchTerm) ||
-        report.user.toLowerCase().includes(searchTerm)
-      );
-    }
-
-    this.dataSource.data = filteredData;
-  }
-
-  openDetails(report: Report): void {
-    this.dialog.open(DetalleReporteComponent, {
-      width: '600px',
-      data: { report }
+    this.reportService.getReports().subscribe({
+      next: (data) => {
+        this.dataSource.data  = data;
+        this.originalData.data  = data;
+        // this.filterForm.valueChanges.subscribe(() => this.applyFilters());
+      },
+      error: (error) => {
+        console.error('Error fetching reports:', error);
+        // Handle error (e.g., show an error message)
+      },
     });
   }
 
-  changeStatus(report: Report, newStatus: string): void {
-    if (newStatus === 'rejected' && !this.rejectionReason) {
-      alert('Debe proporcionar un motivo de rechazo');
-      return;
+  applyFilters(): void {
+    const { dateFrom, dateTo } = this.filterForm.value;
+    const fechaInicio = new Date(dateFrom + 'T00:00:00');
+    const fechaFin = new Date(dateTo + 'T23:59:59.999');
+    if (dateFrom && dateTo) {
+      this.dataSource.data = this.dataSource.data.filter(item => {
+        const fechaItem = new Date(item.fecha);
+        console.log(fechaItem >= fechaInicio && fechaItem <= fechaFin);
+        
+        return (fechaItem >= fechaInicio && fechaItem <= fechaFin);
+      });
     }
+  } 
 
-    // En producción, aquí llamarías a un servicio
-    report.status = newStatus as any;
-    this.applyFilters();
-    
-    console.log(`Estado cambiado a ${newStatus} para reporte ${report.id}`);
-    if (newStatus === 'rejected') {
-      console.log(`Motivo de rechazo: ${this.rejectionReason}`);
-    }
+  clearFilters() {
+    this.filterForm.reset();
+    this.dataSource.data = [...this.originalData.data];  // Restablece todos los datos
+  }
+
+  changeStatus(reportId: string, newStatus: string): void {
+    this.reportService.changeStatus(reportId, newStatus).subscribe({
+    next: () => {
+      console.log("recargar ");
+    }, error: (err) => {
+        console.error('Error al marcar como importante:', err);
+      }
+    });
   }
 }

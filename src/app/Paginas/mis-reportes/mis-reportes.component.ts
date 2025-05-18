@@ -63,6 +63,9 @@ export class MisReportesComponent implements OnInit {
     // }
     this.commentService.getComment(reportId).pipe(
       switchMap((comentarios: any[]) => {
+        if (comentarios.length === 0) {
+          return of([]); // sigue al next con array vacío
+        } 
         const comentariosConUsuario$ = comentarios.map(comentario =>
           this.authService.getUserComment(comentario.clienteId).pipe(
             map((usuario: any) => ({

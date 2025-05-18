@@ -69,6 +69,14 @@ export class ReportService {
     });
   }
 
+  changeStatus(reportId: string, nuevoEstado: string): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${reportId}/estado`, { nuevoEstado }, {
+      ...this.getAuthHeaders(),
+       ...this.getAuthHeaders(),
+        responseType: 'text' as 'json'
+    });
+  }
+
   addCommentToReport(reportId: string, commentData: any): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/reports/${reportId}/comments`, commentData).pipe(
       catchError(this.handleError)

@@ -1,9 +1,13 @@
 import { Component } from '@angular/core';
 import { OnInit } from '@angular/core'; 
 import { ReportService } from '../../servicios/report.service';
+import { AuthService } from '../../servicios/auth.service';
+import { ComentarioService } from '../../servicios/comentario.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import * as mapboxgl from 'mapbox-gl';
+import { of, forkJoin } from 'rxjs';
+import { catchError, switchMap, map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-reportes',
@@ -19,7 +23,11 @@ export class ReportesComponent implements OnInit {
   selectedReport: any = null;
   newCommentText: string = '';
 
-  constructor(private reportService: ReportService) {}
+  constructor(
+    private reportService: ReportService,
+    private authService: AuthService,
+    private commentService: ComentarioService,
+  ) {}
 
   ngOnInit(): void {
     this.loadReports();
@@ -47,22 +55,44 @@ export class ReportesComponent implements OnInit {
     }
   }
 
-  // showReportDetails(reportId: string): void {
-    // this.reportService.getReportById(reportId).subscribe({
-    //     next: (data) => {
-    //       this.selectedReport = data;
-    //       setTimeout(() => {
-    //         this.initMap(this.selectedReport.latitud, this.selectedReport.longitud);
-    //       }, 0); // Espera a que Angular renderice el div
-    //     },
-    //     error: (error) => {
-    //       console.error('Error fetching report details:', error);
-    //     },
-    //   });
-  // }
+  showReportDetails(reportId: string): void {
+    this.commentService.getComment(reportId).pipe(
+      switchMap((comentarios: any[]) => {
+        if (comentarios.length === 0) {
+          return of([]); // sigue al next con array vacío
+        } 
+        const comentariosConUsuario$ = comentarios.map(comentario =>
+          this.authService.getUserComment(comentario.clienteId).pipe(
+            map((usuario: any) => ({
+              ...comentario,
+              nombreCliente: usuario.nombre // o fullName
+            })),
+            // Si falla, igual devuelve el comentario
+            catchError(() => {
+              return of({
+                ...comentario,
+                nombreCliente: 'Desconocido'
+              });
+            })
+          )
+        );
+        return forkJoin(comentariosConUsuario$);
+      })
+    ).subscribe({
+      next: (data) => {
+        this.selectedReport = { reporteId: reportId, comentarios: data };
+        console.log(this.selectedReport);
+        
+      },
+      error: (error) => {
+        console.error('Error fetching report details:', error);
+        // Handle error
+      }
+    });
+  }
 
   closeReportDetails(): void {
-    // this.selectedReport = null;
+    this.selectedReport = null;
   }
 
   markAsImportant(event: Event, reportId: string): void {
