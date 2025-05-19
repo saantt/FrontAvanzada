@@ -12,6 +12,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { DetalleReporteComponent } from '../detalle-reporte/detalle-reporte.component';
 import { ReportService } from '../../servicios/report.service';
+import { CategoriaService } from '../../servicios/categoria.service';
+import { Categoria } from '../../interfaces/categoria.interface';
 
 interface Report {
   titulo: string;
@@ -48,11 +50,13 @@ export class GestionReportesComponent implements OnInit{
   originalData = new MatTableDataSource<Report>();
   selectedReport: Report | null = null;
   rejectionReason: string = '';
+  categorias: Categoria[] = [];
 
   constructor(
     private fb: FormBuilder,
     public dialog: MatDialog,
-    private reportService: ReportService
+    private reportService: ReportService,
+    private categoriaService: CategoriaService,
   ) {
     this.filterForm = this.fb.group({
       dateFrom: [''],
@@ -61,16 +65,35 @@ export class GestionReportesComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.reportService.getReports().subscribe({
-      next: (data) => {
-        this.dataSource.data  = data;
-        this.originalData.data  = data;
-        // this.filterForm.valueChanges.subscribe(() => this.applyFilters());
+    this.loadReports();
+  }
+
+  loadReports(): void {
+    this.categoriaService.listarCategorias().subscribe({
+      next: (categoriasData) => {
+        this.categorias = categoriasData;
+
+        this.reportService.getReports().subscribe({
+          next: (reportesData) => {
+            const reportsConCategoria = reportesData.map(report => {
+              const categoria = categoriasData.find(cat => cat.id === report.categoriaId);
+              return {
+                ...report,
+                nombreCategoria: categoria ? categoria.nombre : 'Sin categoría'
+              };
+            });
+
+            this.dataSource.data = reportsConCategoria;
+            this.originalData.data = [...reportsConCategoria];
+          },
+          error: (err) => {
+            console.error('Error cargando reportes:', err);
+          }
+        });
       },
-      error: (error) => {
-        console.error('Error fetching reports:', error);
-        // Handle error (e.g., show an error message)
-      },
+      error: (err) => {
+        console.error('Error cargando categorías:', err);
+      }
     });
   }
 
@@ -96,7 +119,7 @@ export class GestionReportesComponent implements OnInit{
   changeStatus(reportId: string, newStatus: string): void {
     this.reportService.changeStatus(reportId, newStatus).subscribe({
     next: () => {
-      console.log("recargar ");
+      this.loadReports();
     }, error: (err) => {
         console.error('Error al marcar como importante:', err);
       }

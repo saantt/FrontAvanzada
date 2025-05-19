@@ -159,6 +159,12 @@ tr.mat-row:hover {
   color: #0d47a1;
 }
 
+.status-badge.gray {
+  background-color: #bbbbbb;
+  border-color: white;
+  color: #0f0f0f;
+}
+
 /* Botones estilo Apple */
 button.mat-icon-button {
   transition: all 0.2s ease;

@@ -3,6 +3,8 @@ import { OnInit } from '@angular/core';
 import { ReportService } from '../../servicios/report.service';
 import { AuthService } from '../../servicios/auth.service';
 import { ComentarioService } from '../../servicios/comentario.service';
+import { CategoriaService } from '../../servicios/categoria.service';
+import { Categoria } from '../../interfaces/categoria.interface';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import * as mapboxgl from 'mapbox-gl';
@@ -22,11 +24,13 @@ export class ReportesComponent implements OnInit {
   selectedImportant: string = '';
   selectedReport: any = null;
   newCommentText: string = '';
+  categorias: Categoria[] = [];
 
   constructor(
     private reportService: ReportService,
     private authService: AuthService,
     private commentService: ComentarioService,
+    private categoriaService: CategoriaService,
   ) {}
 
   ngOnInit(): void {
@@ -34,18 +38,34 @@ export class ReportesComponent implements OnInit {
   }
 
   loadReports(): void {
-    this.reportService.getReports().subscribe({
-      
-      next: (data) => {
-        this.reports = data;
-        this.filteredReports = [...this.reports]; // Initialize filteredReports with all reports
+    this.categoriaService.listarCategorias().subscribe({
+      next: (categoriasData) => {
+        this.categorias = categoriasData;
+
+        this.reportService.getReports().subscribe({
+          next: (data) => {
+            // Añadir nombreCategoria a cada reporte según idCategoria
+            this.reports = data.map(report => {
+              const categoria = this.categorias.find(cat => cat.id === report.categoriaId);
+              return {
+                ...report,
+                nombreCategoria: categoria ? categoria.nombre : 'Sin categoría'
+              };
+            });
+
+            this.filteredReports = [...this.reports];
+          },
+          error: (error) => {
+            console.error('Error al obtener reportes:', error);
+          }
+        });
       },
       error: (error) => {
-        console.error('Error fetching reports:', error);
-        // Handle error (e.g., show an error message)
-      },
+        console.error('Error al obtener categorías:', error);
+      }
     });
   }
+
 
   filterReports(): void {
    if (this.selectedImportant) {

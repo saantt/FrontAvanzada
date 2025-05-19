@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { ReportService } from '../../servicios/report.service';
 import { AuthService } from '../../servicios/auth.service';
 import { ComentarioService } from '../../servicios/comentario.service';
+import { CategoriaService } from '../../servicios/categoria.service';
+import { Categoria } from '../../interfaces/categoria.interface';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -18,11 +20,13 @@ export class MisReportesComponent implements OnInit {
   reports: any[] = [];
   showSelectedReport: boolean = false;
   selectedReport: any = null;
+  categorias: Categoria[] = [];
 
   constructor(
     private reportService: ReportService,
     private authService: AuthService,
     private commentService: ComentarioService,
+    private categoriaService: CategoriaService,
     private router: Router
   ) { }
 
@@ -43,18 +47,33 @@ export class MisReportesComponent implements OnInit {
     }
   }
 
-  loadMyReports(): void {
-    // const userId = this.authService.currentUserValue?._id; // Use currentUserValue with optional chaining
+loadMyReports(): void {
+  this.categoriaService.listarCategorias().subscribe({
+    next: (categoriasData) => {
+      this.categorias = categoriasData;
+
       this.reportService.getReports().subscribe({
         next: (data) => {
-          this.reports = data.filter(data => data.clienteId === this.obtenerClienteIdDesdeToken());
+          this.reports = data
+            .filter(report => report.clienteId === this.obtenerClienteIdDesdeToken())
+            .map(report => {
+              const categoria = this.categorias.find(cat => cat.id === report.categoriaId);
+              return {
+                ...report,
+                nombreCategoria: categoria?.nombre || 'Sin categoría'
+              };
+            });
         },
         error: (error) => {
           console.error('Error fetching my reports:', error);
-          // Handle error (e.g., show an error message)
         }
       });
-  }
+    },
+    error: (err) => {
+      console.error('Error fetching categories:', err);
+    }
+  });
+}
 
   showReportDetails(reportId: string): void {
     // if (this.selectedReport && this.selectedReport.reporteId === reportId) {
