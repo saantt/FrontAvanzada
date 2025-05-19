@@ -1,25 +1,87 @@
+/* Estilos generales */
 .card {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s;
-
-  &:hover {
-    transform: translateY(-5px);
-  }
-}
-
-.badge {
-  font-size: 0.9em;
-  padding: 0.5em 0.75em;
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 
 .table {
+  font-size: 0.9rem;
+  
   th {
-    background-color: #f8f9fa;
     font-weight: 600;
   }
 }
 
-canvas {
-  width: 100% !important;
-  height: 300px !important;
+/* Mejoras para el formulario */
+.form-label {
+  font-weight: 500;
+}
+
+/* Estilos para los badges de estado */
+.badge {
+  padding: 0.35em 0.65em;
+  font-size: 0.75em;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+/* Efecto hover para las filas de la tabla */
+.table-hover tbody tr:hover {
+  background-color: rgba(13, 110, 253, 0.05);
+}
+
+/* Espaciado mejorado */
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+.mt-4 {
+  margin-top: 1.5rem !important;
+}
+
+/* Estilo para el card header */
+.card-header {
+  padding: 1rem 1.5rem;
+}
+
+/* Responsividad mejorada */
+@media (max-width: 768px) {
+  .table-responsive {
+    border: 0;
+  }
+  
+  .table thead {
+    display: none;
+  }
+  
+  .table tr {
+    display: block;
+    margin-bottom: 1rem;
+    border: 1px solid #dee2e6;
+    border-radius: 0.25rem;
+  }
+  
+  .table td {
+    display: block;
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+    border-bottom: 1px solid #dee2e6;
+  }
+  
+  .table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 1rem;
+    width: calc(50% - 1rem);
+    padding-right: 1rem;
+    font-weight: 600;
+    text-align: left;
+    color: #495057;
+  }
+  
+  .table td:last-child {
+    border-bottom: 0;
+  }
 }

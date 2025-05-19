@@ -1,91 +1,105 @@
 <div class="container mt-4">
-  <h2>Generar Informe</h2>
+  <h2 class="text-primary mb-4">Generar Informe</h2>
   
-  <form #filtroForm="ngForm" (ngSubmit)="generarInforme()">
-    <div class="row mb-3">
-      <div class="col-md-6">
-        <label for="fechaInicio" class="form-label">Fecha Inicio</label>
-        <input type="datetime-local" class="form-control" id="fechaInicio" 
-               [(ngModel)]="filtro.fechaInicio" name="fechaInicio" required>
-      </div>
-      <div class="col-md-6">
-        <label for="fechaFin" class="form-label">Fecha Fin</label>
-        <input type="datetime-local" class="form-control" id="fechaFin" 
-               [(ngModel)]="filtro.fechaFin" name="fechaFin" required>
-      </div>
-    </div>
-
-    <div class="row mb-3">
-      <div class="col-md-6">
-        <label for="categoria" class="form-label">Categoría</label>
-        <select class="form-select" id="categoria" 
-                [(ngModel)]="filtro.categoriaId" name="categoriaId">
-          <option value="">Todas las categorías</option>
-          <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</option>
-        </select>
-      </div>
-      <div class="col-md-6">
-        <label for="sector" class="form-label">Sector</label>
-        <input type="text" class="form-control" id="sector" 
-               [(ngModel)]="filtro.sector" name="sector" placeholder="Opcional">
-      </div>
-    </div>
-
-    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-      <button type="submit" class="btn btn-primary me-md-2" [disabled]="!filtroForm.valid || loading">
-        <span *ngIf="!loading">Generar Informe</span>
-        <span *ngIf="loading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-      </button>
-      <button type="button" class="btn btn-success" (click)="descargarPDF()" [disabled]="!informe || loading">
-        Descargar PDF
-      </button>
-    </div>
-  </form>
-
-  <div *ngIf="informe" class="mt-4">
-    <div class="card">
-      <div class="card-header">
-        <h3>{{ informe.tituloInforme }}</h3>
-        <small class="text-muted">Generado el: {{ informe.fechaGeneracion | date:'medium' }}</small>
-      </div>
-      <div class="card-body">
-        <h5 class="card-title">Resumen</h5>
-        <p class="card-text">Período: {{ informe.periodo }}</p>
-        <p class="card-text">Total de reportes: {{ informe.totalReportes }}</p>
-
-        <h5 class="mt-4">Estadísticas</h5>
-        <ul class="list-group">
-          <li class="list-group-item">
-            Reportes importantes: {{ informe.estadisticas.reportesImportantes }}
-          </li>
-          <li class="list-group-item" *ngFor="let cat of informe.estadisticas.reportesPorCategoria | keyvalue">
-            {{ cat.key }}: {{ cat.value }}
-          </li>
-        </ul>
-
-        <h5 class="mt-4">Reportes</h5>
-        <div class="table-responsive">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Título</th>
-                <th>Descripción</th>
-                <th>Fecha</th>
-                <th>Categoría</th>
-                <th>Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let reporte of informe.reportes">
-                <td>{{ reporte.titulo }}</td>
-                <td>{{ reporte.descripcion }}</td>
-                <td>{{ reporte.fecha | date:'short' }}</td>
-                <td>{{ reporte.nombreCategoria }}</td>
-                <td>{{ reporte.estado }}</td>
-              </tr>
-            </tbody>
-          </table>
+  <div class="card shadow-sm mb-5">
+    <div class="card-body">
+      <form #filtroForm="ngForm" (ngSubmit)="generarInforme()">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label for="fechaInicio" class="form-label">Fecha Inicio</label>
+            <input type="datetime-local" class="form-control" id="fechaInicio" 
+                   [(ngModel)]="filtro.fechaInicio" name="fechaInicio" required>
+          </div>
+          <div class="col-md-6">
+            <label for="fechaFin" class="form-label">Fecha Fin</label>
+            <input type="datetime-local" class="form-control" id="fechaFin" 
+                   [(ngModel)]="filtro.fechaFin" name="fechaFin" required>
+          </div>
+          <div class="col-md-6">
+            <label for="categoria" class="form-label">Categoría</label>
+            <select class="form-select" id="categoria" 
+                    [(ngModel)]="filtro.categoriaId" name="categoriaId">
+              <option value="">Todas las categorías</option>
+              <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</option>
+            </select>
+          </div>
+          <div class="col-md-6">
+            <label for="sector" class="form-label">Sector</label>
+            <input type="text" class="form-control" id="sector" 
+                   [(ngModel)]="filtro.sector" name="sector" placeholder="Ej: norte, sur, centro">
+          </div>
+          <div class="col-12 d-flex justify-content-end gap-2">
+            <button type="submit" class="btn btn-primary" [disabled]="!filtroForm.valid || loading">
+              <span *ngIf="!loading">Generar Informe</span>
+              <span *ngIf="loading" class="spinner-border spinner-border-sm"></span>
+            </button>
+            <button type="button" class="btn btn-success" 
+                    (click)="descargarPDF()" [disabled]="!informe || loading">
+              Descargar PDF
+            </button>
+          </div>
         </div>
+      </form>
+    </div>
+  </div>
+
+  <div *ngIf="informe" class="card shadow">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">{{ informe.tituloInforme }}</h3>
+      <small class="text-white-50">Generado el: {{ informe.fechaGeneracion | date:'medium' }}</small>
+    </div>
+    
+    <div class="card-body">
+      <h5 class="card-title text-primary">Resumen</h5>
+      <div class="mb-4">
+        <p class="mb-1"><strong>Período:</strong> {{ informe.periodo }}</p>
+        <p class="mb-1"><strong>Total de reportes:</strong> {{ informe.totalReportes }}</p>
+      </div>
+
+      <h5 class="text-primary mt-4">Estadísticas</h5>
+      <ul class="list-group mb-4">
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          Reportes importantes
+          <span class="badge bg-primary rounded-pill">{{ informe.estadisticas.reportesImportantes }}</span>
+        </li>
+        <li *ngFor="let cat of informe.estadisticas.reportesPorCategoria | keyvalue" 
+            class="list-group-item d-flex justify-content-between align-items-center">
+          {{ cat.key }}
+          <span class="badge bg-secondary rounded-pill">{{ cat.value }}</span>
+        </li>
+      </ul>
+
+      <h5 class="text-primary mt-4">Reportes</h5>
+      <div class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead class="table-primary">
+            <tr>
+              <th>Título</th>
+              <th>Descripción</th>
+              <th>Fecha</th>
+              <th>Categoría</th>
+              <th>Estado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let reporte of informe.reportes">
+              <td>{{ reporte.titulo }}</td>
+              <td>{{ reporte.descripcion }}</td>
+              <td>{{ reporte.fecha | date:'short' }}</td>
+              <td>{{ reporte.nombreCategoria }}</td>
+              <td>
+                <span [ngClass]="{
+                  'badge': true,
+                  'bg-warning': reporte.estado === 'PENDIENTE',
+                  'bg-success': reporte.estado === 'RESUELTO',
+                  'bg-danger': reporte.estado === 'RECHAZADO'
+                }">
+                  {{ reporte.estado }}
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

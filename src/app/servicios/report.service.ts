@@ -122,10 +122,16 @@ export class ReportService {
   }
 
   generarInforme(filtro: any): Observable<ApiResponseInforme> {
-  let params = new HttpParams()
-    .set('fechaInicio', this.formatDate(filtro.fechaInicio))
-    .set('fechaFin', this.formatDate(filtro.fechaFin));
-
+  // Configura parámetros
+  let params = new HttpParams();
+  
+  // Agrega solo los parámetros que tienen valor
+  if (filtro.fechaInicio) {
+    params = params.set('fechaInicio', filtro.fechaInicio);
+  }
+  if (filtro.fechaFin) {
+    params = params.set('fechaFin', filtro.fechaFin);
+  }
   if (filtro.categoriaId) {
     params = params.set('categoriaId', filtro.categoriaId);
   }
@@ -133,12 +139,15 @@ export class ReportService {
     params = params.set('sector', filtro.sector);
   }
 
+  // Agrega headers de autenticación
   const headers = this.getAuthHeaders();
-  
+
   return this.http.get<ApiResponseInforme>(`${this.apiUrl}/informe`, {
     params,
     headers: headers.headers
-  });
+  }).pipe(
+    catchError(this.handleError)
+  );
 }
 
 descargarInformePDF(filtro: any): Observable<Blob> {
