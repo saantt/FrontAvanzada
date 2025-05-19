@@ -18,17 +18,17 @@ import { ReportesComponent } from './Paginas/reportes/reportes.component';
 import { MisReportesComponent } from './Paginas/mis-reportes/mis-reportes.component';
 import { ComentariosComponent } from './Paginas/comentarios/comentarios.component';
 import { NotificacionesComponent } from './Paginas/notificaciones/notificaciones.component';
+import { InformesComponent } from './Paginas/informes/informes.component';
 
 // Category
 import { CategoriaComponent } from './Paginas/categoria/categoria.component';
 
 // Admin specific components
-import { InicioAdminComponent } from './Paginas/inicio-admin/inicio-admin.component';
-import { CuentaAdminComponent } from './Paginas/cuenta-admin/cuenta-admin.component';
 import { PanelUsuariosComponent } from './Paginas/panel-usuarios/panel-usuarios.component';
 import { VerReportesAdminComponent } from './Paginas/ver-reportes-admin/ver-reportes-admin.component';
 import { GestionReportesComponent } from './Paginas/gestion-reportes/gestion-reportes.component';
 import { GenerarInformesComponent } from './Paginas/generar-informes/generar-informes.component';
+import { EditarReporteComponent } from './Paginas/editar-reporte/editar-reporte.component';
 
 // Core pages
 import { InicioComponent } from './Paginas/inicio/inicio.component';
@@ -57,18 +57,17 @@ export const routes: Routes = [
   { path: 'comentarios', component: ComentariosComponent },
   { path: 'detalle-reporte', component: DetalleReporteComponent },
   { path: 'notificaciones', component: NotificacionesComponent },
+  { path: 'informes', component: InformesComponent },
 
   //Category
   { path: 'categoria', component: CategoriaComponent },
 
   // Admin routes
-  { path: 'inicio-admin', component: InicioAdminComponent },
-  { path: 'cuenta-admin', component: CuentaAdminComponent },
   { path: 'panel-usuarios', component: PanelUsuariosComponent },
   { path: 'ver-reportes-admin', component: VerReportesAdminComponent },
   { path: 'gestion-reportes', component: GestionReportesComponent },
-  { path: 'generar-informes', component: GenerarInformesComponent },
-  
+  { path: 'editar-reporte/:id', component: EditarReporteComponent },
+
   // Fallback route
   { path: '**', redirectTo: '' }
 ];

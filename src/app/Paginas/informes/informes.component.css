@@ -1,0 +1,25 @@
+.card {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
+}
+
+.badge {
+  font-size: 0.9em;
+  padding: 0.5em 0.75em;
+}
+
+.table {
+  th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+  }
+}
+
+canvas {
+  width: 100% !important;
+  height: 300px !important;
+}

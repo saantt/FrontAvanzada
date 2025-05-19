@@ -150,7 +150,7 @@ export class FormularioComponent implements OnInit, AfterViewInit {
 
     this.reportService.crearReporte(nuevoReporte).subscribe({
       next: () => {
-        alert('Reporte enviado correctamente');
+        alert('Reporte creado correctamente');
         this.crearReporteForm.reset();
       },
       error: (err) => console.error('Error al enviar el reporte', err)

@@ -1,0 +1,70 @@
+<div class="form-container" *ngIf="dataReports">
+  <h2>Editar Reporte</h2>
+
+  <form #form="ngForm" (ngSubmit)="editarReporte()">
+
+    <!-- Título -->
+    <div>
+      <label for="titulo">Título:</label>
+      <input
+        type="text"
+        id="titulo"
+        name="titulo"
+        [(ngModel)]="dataReports.titulo"
+        required
+      />
+    </div>
+
+    <!-- Categoría -->
+    <div>
+      <label for="categoria">Categoría:</label>
+      <select
+        id="categoria"
+        name="categoria"
+        [(ngModel)]="dataReports.categoria"
+        required
+      >
+        <option value="" disabled>Seleccione una categoría</option>
+        <option *ngFor="let c of categorias" [value]="c.id">
+          {{ c.nombre }}
+        </option>
+      </select>
+    </div>
+
+    <!-- Descripción -->
+    <div>
+      <label for="descripcion">Descripción:</label>
+      <textarea
+        id="descripcion"
+        name="descripcion"
+        [(ngModel)]="dataReports.descripcion"
+        required
+      ></textarea>
+    </div>
+
+    <!-- Mapa -->
+    <div #mapa style="height: 400px; width: 100%;"></div>
+    <label class="map-label">Haz clic o arrastra el marcador para seleccionar la ubicación</label>
+
+    <!-- Ubicación (solo lectura) -->
+    <div>
+      <label>Ubicación:</label>
+      <input
+        type="text"
+        name="ubicacion"
+        [value]="'Lat: ' + lat + ', Lng: ' + lng"
+        readonly
+      />
+    </div>
+
+    <!-- Imagen -->
+    <div>
+      <label>Imagen del reporte:</label>
+      <input type="file" (change)="onFileChange($event)" />
+    </div>
+
+    <!-- Botón -->
+    <button [disabled]="!form || form.invalid">Actualizar</button>
+
+  </form>
+</div>

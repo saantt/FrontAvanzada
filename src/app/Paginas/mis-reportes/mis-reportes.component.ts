@@ -9,7 +9,7 @@ import { CommonModule } from '@angular/common';
   selector: 'app-mis-reportes',
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './mis-reportes.component.html',
-  styleUrl: './mis-reportes.component.css'
+  styleUrls: ['./mis-reportes.component.css']
 })
 export class MisReportesComponent implements OnInit {
   reports: any[] = [];
@@ -43,8 +43,8 @@ export class MisReportesComponent implements OnInit {
       this.reportService.getReports().subscribe({
         next: (data) => {
           console.log(data);
-          
-          this.reports = data.filter(data => data.clienteId === this.obtenerClienteIdDesdeToken());
+
+          this.reports = data.filter(data => data.clienteId === this.obtenerClienteIdDesdeToken() && data.estadoActual?.estado !== 'ELIMINADO');
           console.log(this.reports);
           
         },
@@ -72,8 +72,7 @@ export class MisReportesComponent implements OnInit {
   }
 
   editReport(reportId: string): void {
-    // Navigate to the edit report page
-    this.router.navigate(['/edit-report', reportId]);
+  this.router.navigate(['/editar-reporte', reportId]);
   }
 
   deleteReport(reportId: string): void {
