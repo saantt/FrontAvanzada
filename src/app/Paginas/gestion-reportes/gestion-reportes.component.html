@@ -2,28 +2,7 @@
     <h2>Gestión de Reportes</h2>
   
     <div class="filter-section">
-      <form [formGroup]="filterForm">
-        <div class="filter-row">
-          <mat-form-field appearance="outline">
-            <mat-label>Buscar</mat-label>
-            <input matInput formControlName="search" placeholder="Título o usuario">
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline">
-            <mat-label>Categoría</mat-label>
-            <mat-select formControlName="category">
-              <mat-option *ngFor="let cat of categories" [value]="cat">{{cat}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline">
-            <mat-label>Estado</mat-label>
-            <mat-select formControlName="status">
-              <mat-option *ngFor="let status of statuses" [value]="status">{{status}}</mat-option>
-            </mat-select>
-          </mat-form-field>
-        </div>
-  
+      <form [formGroup]="filterForm" (ngSubmit)="applyFilters()" class="filter-form">
         <div class="filter-row">
           <mat-form-field appearance="outline">
             <mat-label>Desde</mat-label>
@@ -35,53 +14,89 @@
             <input matInput formControlName="dateTo" type="date">
           </mat-form-field>
         </div>
+
+        <div class="filter-row-buttons">
+          <button type="submit">Buscar</button>
+          <button type="button" (click)="clearFilters()">Limpiar</button>
+        </div>
       </form>
     </div>
   
     <div class="table-container">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
         <!-- ID Column -->
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>ID</th>
-          <td mat-cell *matCellDef="let element">{{element.id}}</td>
-        </ng-container>
-  
         <!-- Title Column -->
         <ng-container matColumnDef="title">
           <th mat-header-cell *matHeaderCellDef>Título</th>
-          <td mat-cell *matCellDef="let element">{{element.title}}</td>
+          <td mat-cell *matCellDef="let element">{{element.titulo}}</td>
         </ng-container>
   
         <!-- Category Column -->
         <ng-container matColumnDef="category">
           <th mat-header-cell *matHeaderCellDef>Categoría</th>
-          <td mat-cell *matCellDef="let element">{{element.category}}</td>
-        </ng-container>
-  
-        <!-- Status Column -->
-        <ng-container matColumnDef="status">
-          <th mat-header-cell *matHeaderCellDef>Estado</th>
-          <td mat-cell *matCellDef="let element">
-            <span [class]="'status-badge ' + element.status">
-              {{element.status | titlecase}}
-            </span>
-          </td>
+          <td mat-cell *matCellDef="let element">{{element.nombreCategoria}}</td>
         </ng-container>
   
         <!-- Date Column -->
         <ng-container matColumnDef="date">
           <th mat-header-cell *matHeaderCellDef>Fecha</th>
-          <td mat-cell *matCellDef="let element">{{element.date | date:'dd/MM/yyyy'}}</td>
+          <td mat-cell *matCellDef="let element">{{element.fecha | date:'dd/MM/yyyy'}}</td>
         </ng-container>
-  
+
         <!-- User Column -->
-        <ng-container matColumnDef="user">
-          <th mat-header-cell *matHeaderCellDef>Usuario</th>
-          <td mat-cell *matCellDef="let element">{{element.user}}</td>
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef>Descripción</th>
+          <td mat-cell *matCellDef="let element">{{element.descripcion}}</td>
+        </ng-container>
+
+        <!-- Status Column -->
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef>Estado</th>
+          <td mat-cell *matCellDef="let element">
+            <button 
+              [ngClass]="{
+                'status-badge': true,
+                'sent': element.estadoActual.estado === 'ENVIADO',
+                'gray': element.estadoActual.estado !== 'ENVIADO'
+              }"
+              (click)="changeStatus(element.id, 'ENVIADO')">
+              {{ 'Enviado' }}
+            </button>
+
+            <button 
+              [ngClass]="{
+                'status-badge': true,
+                'resolved': element.estadoActual.estado === 'RESUELTO',
+                'gray': element.estadoActual.estado !== 'RESUELTO'
+              }"
+              (click)="changeStatus(element.id, 'RESUELTO')">
+              {{ 'Resuelto' }}
+            </button>
+
+            <button 
+              [ngClass]="{
+                'status-badge': true,
+                'process': element.estadoActual.estado === 'EN_PROCESO',
+                'gray': element.estadoActual.estado !== 'EN_PROCESO'
+              }"
+              (click)="changeStatus(element.id, 'EN_PROCESO')">
+              {{ 'Proceso' }}
+            </button>
+
+            <button 
+              [ngClass]="{
+                'status-badge': true,
+                'pending': element.estadoActual.estado === 'PENDIENTE',
+                'gray': element.estadoActual.estado !== 'PENDIENTE'
+              }"
+              (click)="changeStatus(element.id, 'PENDIENTE')">
+              {{ 'Pendiente' }}
+            </button>
+          </td>
         </ng-container>
   
         <!-- Actions Column -->
-        <ng-container matColumnDef="actions">
+        <!-- <ng-container matColumnDef="actions">
           <th mat-header-cell *matHeaderCellDef>Acciones</th>
           <td mat-cell *matCellDef="let element">
             <button mat-icon-button (click)="openDetails(element)" title="Ver detalles">
@@ -97,7 +112,7 @@
               <mat-icon>done_all</mat-icon>
             </button>
           </td>
-        </ng-container>
+        </ng-container> -->
   
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -106,11 +121,11 @@
   
     <!-- Dialogo para motivo de rechazo -->
     <div *ngIf="selectedReport" class="rejection-dialog">
-      <h3>Motivo de rechazo para {{selectedReport.title}}</h3>
+      <!-- <h3>Motivo de rechazo para {{selectedReport.title}}</h3>
       <textarea [(ngModel)]="rejectionReason" placeholder="Explique el motivo del rechazo..."></textarea>
       <div class="dialog-actions">
         <button mat-button (click)="selectedReport = null">Cancelar</button>
         <button mat-button color="warn" (click)="changeStatus(selectedReport, 'rejected')">Confirmar Rechazo</button>
-      </div>
+      </div> -->
     </div>
   </div>

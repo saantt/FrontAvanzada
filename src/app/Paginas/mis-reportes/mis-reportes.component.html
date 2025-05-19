@@ -7,32 +7,41 @@
   
     <div *ngIf="reports.length > 0" class="my-reports-list">
       <div *ngFor="let report of reports" class="my-report-item">
-        <div class="my-report-thumbnail">
-          <img *ngIf="report.images && report.images.length > 0" [src]="report.images[0]" alt="Report Image">
-          <div *ngIf="!report.images || report.images.length === 0" class="no-image">Sin Imagen</div>
+        <div class="my-report-card" *ngIf="selectedReport?.reporteId !== report.id">
+          <div class="my-report-thumbnail">
+            <img *ngIf="report.images && report.images.length > 0" [src]="report.images[0]" alt="Report Image">
+            <div *ngIf="!report.images || report.images.length === 0" class="no-image">Sin Imagen</div>
+          </div>
+          <div class="my-report-details">
+            <h2 class="my-report-title">{{ report.titulo }}</h2>
+            <p class="my-report-category">{{ report.nombreCategoria }}</p>
+            <p class="my-report-description">{{ report.descripcion  }}</p>
+            <div class="my-report-actions">
+              <button (click)="showReportDetails(report.id)">Comentarios</button>
+              <button (click)="editReport(report.id)">Editar</button>
+              <button (click)="deleteReport(report.id)">Eliminar</button>
+            </div>
+          </div>
         </div>
-        <div class="my-report-details">
-          <h2 class="my-report-title">{{ report.titulo }}</h2>
-          <p class="my-report-category">{{ report.nombreCategoria }}</p>
-          <p class="my-report-description">{{ report.descripcion  }}</p>
+
+        <div *ngIf="selectedReport?.reporteId === report.id" class="report-details-comments">
+          <h3>Comentarios</h3>
+          <div *ngIf="selectedReport.comentarios.length > 0; else noComments" class="comments-scroll">
+            <div *ngFor="let comment of selectedReport.comentarios" class="comment-item">
+              <strong>{{ comment.nombreCliente }}</strong>
+              <p>{{ comment.mensaje }}</p>
+            </div>
+          </div>
+          <ng-template #noComments>
+            <p>No hay comentarios aún.</p>
+          </ng-template>
           <div class="my-report-actions">
-            <button (click)="showReportDetails(report.id)">Ver Detalles</button>
-            <button (click)="editReport(report.id)">Editar</button>
-            <button (click)="deleteReport(report.id)">Eliminar</button>
+            <button (click)="selectedReport = null">
+              ← Regresar
+            </button>
           </div>
         </div>
       </div>
-    </div>
-  
-    <div *ngIf="selectedReport" class="report-details-modal">
-      <div class="modal-content">
-         <span class="close-button" (click)="closeReportDetails()">&times;</span>
-        <h2 class="modal-title">{{ selectedReport.title }}</h2>
-        <p class="modal-category">{{ selectedReport.category }}</p>
-        <p class="modal-description">{{ selectedReport.description }}</p>
-         <div class="modal-images">
-          <img *ngFor="let image of selectedReport.images" [src]="image" alt="Report Image">
-        </div>
-        </div>
+
     </div>
   </div>

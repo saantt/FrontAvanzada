@@ -11,47 +11,48 @@
     </div>
   
     <div class="reports-list">
-      <div *ngFor="let report of filteredReports" class="report-item" (click)="showReportDetails(report.id)">
-        <div class="report-thumbnail">
-          <img *ngIf="report.images && report.images.length > 0" [src]="report.images[0]" alt="Report Image">
-          <div *ngIf="!report.images || report.images.length === 0" class="no-image">Sin Imagen</div>
+      <!-- (click)="showReportDetails(report.id) -->
+      <div *ngFor="let report of filteredReports" class="report-item">
+        <div class="report-card" *ngIf="selectedReport?.reporteId !== report.id">
+          <div class="report-thumbnail">
+            <img *ngIf="report.images && report.images.length > 0" [src]="report.images[0]" alt="Report Image">
+            <div *ngIf="!report.images || report.images.length === 0" class="no-image">Sin Imagen</div>
+          </div>
+          <div class="report-details">
+            <h2 class="report-title">{{ report.titulo }}</h2>
+            <p class="report-category">{{ report.nombreCategoria }}</p>
+            <p class="report-description">{{ report.descripcion  }}</p>
+            <div class="report-meta">
+              <span class="report-date">{{ report.fecha | date }}</span>
+              <span class="report-priority">
+                <label class="checkbox-label" for="important-checkbox-{{report.id}}">Importante</label>
+                <input type="checkbox" id="important-checkbox-{{report.id}}" [checked]="report.contadorImportante" (change)="markAsImportant($event, report.id)"/>
+              </span>
+              <div class="my-report-actions">
+                <button (click)="showReportDetails(report.id)">Comentarios</button>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="report-details">
-          <h2 class="report-title">{{ report.titulo }}</h2>
-          <p class="report-category">{{ report.nombreCategoria }}</p>
-          <p class="report-description">{{ report.descripcion  }}</p>
-          <div class="report-meta">
-            <span class="report-date">{{ report.createdAt | date }}</span>
-            <span class="report-priority">
-              <label class="checkbox-label" for="important-checkbox-{{report.id}}">Importante</label>
-              <input type="checkbox" id="important-checkbox-{{report.id}}" [checked]="report.contadorImportante" (change)="markAsImportant($event, report.id)"/>
-            </span>
+
+        <div *ngIf="selectedReport?.reporteId === report.id" class="report-details-comments">
+          <h3>Comentarios</h3>
+          <div *ngIf="selectedReport.comentarios.length > 0; else noComments" class="comments-scroll">
+            <div *ngFor="let comment of selectedReport.comentarios" class="comment-item">
+              <strong>{{ comment.nombreCliente }}</strong>
+              <p>{{ comment.mensaje }}</p>
+            </div>
+          </div>
+          <ng-template #noComments>
+            <p>No hay comentarios aún.</p>
+          </ng-template>
+          <div class="my-report-actions">
+            <button (click)="selectedReport = null">
+              ← Regresar
+            </button>
           </div>
         </div>
       </div>
     </div>
   
-    <div *ngIf="selectedReport" class="report-details-modal">
-      <div class="modal-content">
-        <span class="close-button" (click)="closeReportDetails()">&times;</span>
-        <h2 class="modal-title">{{ selectedReport.titulo }}</h2>
-        <p class="modal-category">{{ selectedReport.nombreCategoria }}</p>
-        <p class="modal-description">{{ selectedReport.descripcion }}</p>
-        <div class="modal-images">
-          <img *ngFor="let image of selectedReport.images" [src]="image" alt="Report Image">
-        </div>
-        <div class="modal-map" id="mapbox">
-          </div>
-        <div class="modal-comments">
-          <h3>Comentarios</h3>
-          <div *ngFor="let comment of selectedReport.comments" class="comment">
-            <p class="comment-author">{{ comment.author }}</p>
-            <p class="comment-text">{{ comment.text }}</p>
-            <p class="comment-date">{{ comment.createdAt | date }}</p>
-          </div>
-          <textarea [(ngModel)]="newCommentText" placeholder="Escribe un comentario..."></textarea>
-          <button (click)="addComment()">Publicar Comentario</button>
-        </div>
-      </div>
-    </div>
   </div>

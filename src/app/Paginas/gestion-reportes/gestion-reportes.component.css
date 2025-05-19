@@ -16,17 +16,57 @@ h2 {
 
 /* Sección de filtros estilo Apple */
 .filter-section {
-  background-color: #f5f5f7;
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  max-width: 400px;
+  margin: auto;
+  padding: 1rem;
+}
+
+.filter-form {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
 }
 
 .filter-row {
   display: flex;
   gap: 16px;
   margin-bottom: 16px;
+}
+
+.filter-field {
+  flex: 1;
+}
+
+.filter-row-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.filter-row-buttons button {
+  padding: 6px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #007aff;
+  color: white;
+  transition: background-color 0.2s ease, transform 0.2s ease;
+  line-height: 1.2;
+  min-width: 80px;
+  height: 36px;
+}
+
+.filter-row-buttons button:hover {
+  background-color: #005fcc;
+  transform: scale(1.03);
+}
+
+.filter-row-buttons button:active {
+  transform: scale(0.98);
 }
 
 .filter-row:last-child {
@@ -88,29 +128,41 @@ tr.mat-row:hover {
 .status-badge {
   display: inline-block;
   padding: 4px 10px;
+  margin: 0 2px;
   border-radius: 50px;
   font-size: 12px;
   font-weight: 500;
+  cursor: pointer;
 }
 
 .status-badge.pending {
   background-color: #ffd54f;
+  border-color: #ffd54f;
   color: #5e4200;
 }
 
-.status-badge.verified {
+.status-badge.sent {
   background-color: #66bb6a;
+  border-color: #66bb6a;
   color: #1b5e20;
 }
 
-.status-badge.rejected {
-  background-color: #ef5350;
+.status-badge.process {
+  background-color: #FFA726;
+  border-color: #FFA726;
   color: #b71c1c;
 }
 
 .status-badge.resolved {
   background-color: #42a5f5;
+  border-color: #42a5f5;
   color: #0d47a1;
+}
+
+.status-badge.gray {
+  background-color: #bbbbbb;
+  border-color: white;
+  color: #0f0f0f;
 }
 
 /* Botones estilo Apple */

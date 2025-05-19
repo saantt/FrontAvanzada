@@ -46,8 +46,8 @@ export class ReportService {
         //  Manejar diferentes estructuras de respuesta
         if (Array.isArray(response.respuesta)) {
           return response.respuesta;
-        } else if (response && response.data) {
-          return response.data;
+        } else if (response && response.respuesta) {
+          return response.respuesta;
         } else {
           return []; //  Devolver un array vacío por defecto
         }
@@ -64,6 +64,14 @@ export class ReportService {
 
   markReportAsImportant(reportId: any): Observable<any> {
     return this.http.put<any>(`${this.apiUrl}/${reportId}/importante`, {}, {
+      ...this.getAuthHeaders(),
+       ...this.getAuthHeaders(),
+        responseType: 'text' as 'json'
+    });
+  }
+
+  changeStatus(reportId: string, nuevoEstado: string): Observable<any> {
+    return this.http.put<any>(`${this.apiUrl}/${reportId}/estado`, { nuevoEstado }, {
       ...this.getAuthHeaders(),
        ...this.getAuthHeaders(),
         responseType: 'text' as 'json'
