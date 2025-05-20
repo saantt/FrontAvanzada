@@ -5,12 +5,14 @@ import { AuthService } from '../../servicios/auth.service';
 import { ComentarioService } from '../../servicios/comentario.service';
 import { CategoriaService } from '../../servicios/categoria.service';
 import { Categoria } from '../../interfaces/categoria.interface';
+import { environment } from './enviromment';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import * as mapboxgl from 'mapbox-gl';
+// import * as mapboxgl from 'mapbox-gl';
 import { of, forkJoin } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
 
+declare var mapboxgl: any;
 @Component({
   selector: 'app-reportes',
   imports: [ReactiveFormsModule,CommonModule,FormsModule],
@@ -34,6 +36,7 @@ export class ReportesComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    (mapboxgl as any).accessToken = environment.mapboxToken;
     this.loadReports();
   }
 
@@ -45,7 +48,9 @@ export class ReportesComponent implements OnInit {
         this.reportService.getReports().subscribe({
           next: (data) => {
             // Añadir nombreCategoria a cada reporte según idCategoria
-            this.reports = data.map(report => {
+            this.reports = data
+            .filter(report => report.estadoActual?.estado !== 'ELIMINADO')
+            .map(report => {
               const categoria = this.categorias.find(cat => cat.id === report.categoriaId);
               return {
                 ...report,
@@ -54,6 +59,14 @@ export class ReportesComponent implements OnInit {
             });
 
             this.filteredReports = [...this.reports];
+
+            setTimeout(() => {
+              this.filteredReports.forEach((report, i) => {
+                if (report.ubicacion?.latitud && report.ubicacion?.longitud) {
+                  this.initMap(report.ubicacion.latitud, report.ubicacion.longitud, report.id);
+                }
+              });
+            }, 100);
           },
           error: (error) => {
             console.error('Error al obtener reportes:', error);
@@ -113,6 +126,13 @@ export class ReportesComponent implements OnInit {
 
   closeReportDetails(): void {
     this.selectedReport = null;
+    setTimeout(() => {
+      this.filteredReports.forEach((report) => {
+        if (report.ubicacion?.latitud && report.ubicacion?.longitud) {
+          this.initMap(report.ubicacion.latitud, report.ubicacion.longitud, report.id);
+        }
+      });
+    }, 0);
   }
 
   markAsImportant(event: Event, reportId: string): void {
@@ -142,16 +162,21 @@ export class ReportesComponent implements OnInit {
     }
   }
 
-  initMap(lat: number, lng: number): void {
-  const map = new mapboxgl.Map({
-    container: 'mapbox', // ID del div
-    style: 'mapbox://styles/mapbox/streets-v11',
-    center: [lng, lat],
-    zoom: 14
-  });
+  initMap(lat: number, lng: number, reportId: string): void {
+    const mapContainer = document.getElementById(`map-${reportId}`);
+    if (!mapContainer) {
+      console.warn(`No se encontró el div para el mapa con ID map-${reportId}`);
+      return;
+    }
 
-  new mapboxgl.Marker()
-    .setLngLat([lng, lat])
-    .addTo(map);
+    const map = new mapboxgl.Map({
+      container: mapContainer,
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [lng, lat],
+      zoom: 14,
+      interactive: true
+    });
+
+    new mapboxgl.Marker().setLngLat([lng, lat]).addTo(map);
   }
 }

@@ -13,12 +13,15 @@
     <div class="reports-list">
       <!-- (click)="showReportDetails(report.id) -->
       <div *ngFor="let report of filteredReports" class="report-item">
-        <div class="report-card" *ngIf="selectedReport?.reporteId !== report.id">
+        <div class="report-card">
           <div class="report-thumbnail">
-            <img *ngIf="report.images && report.images.length > 0" [src]="report.images[0]" alt="Report Image">
-            <div *ngIf="!report.images || report.images.length === 0" class="no-image">Sin Imagen</div>
+            <div id="map-{{report.id}}" style="height: 300px; width: 100%;"></div>
           </div>
-          <div class="report-details">
+          <!-- detalles -->
+          <div class="report-details" *ngIf="selectedReport?.reporteId !== report.id">
+            <div class="map-coordinates">
+              Latitud: {{ report.ubicacion.latitud }}, Longitud: {{ report.ubicacion.longitud }}
+            </div>
             <h2 class="report-title">{{ report.titulo }}</h2>
             <p class="report-category">{{ report.nombreCategoria }}</p>
             <p class="report-description">{{ report.descripcion  }}</p>
@@ -33,25 +36,25 @@
               </div>
             </div>
           </div>
-        </div>
-
-        <div *ngIf="selectedReport?.reporteId === report.id" class="report-details-comments">
-          <h3>Comentarios</h3>
-          <div *ngIf="selectedReport.comentarios.length > 0; else noComments" class="comments-scroll">
-            <div *ngFor="let comment of selectedReport.comentarios" class="comment-item">
-              <strong>{{ comment.nombreCliente }}</strong>
-              <p>{{ comment.mensaje }}</p>
+          <!-- comentarios -->
+          <div *ngIf="selectedReport?.reporteId === report.id" class="report-details-comments">
+            <h3>Comentarios</h3>
+            <div *ngIf="selectedReport.comentarios.length > 0; else noComments" class="comments-scroll">
+              <div *ngFor="let comment of selectedReport.comentarios" class="comment-item">
+                <strong>{{ comment.nombreCliente }} :</strong> {{ comment.mensaje }}
+              </div>
+            </div>
+            <ng-template #noComments>
+              <p>No hay comentarios aún.</p>
+            </ng-template>
+            <div class="my-report-actions">
+              <button (click)="selectedReport = null">
+                ← Regresar
+              </button>
             </div>
           </div>
-          <ng-template #noComments>
-            <p>No hay comentarios aún.</p>
-          </ng-template>
-          <div class="my-report-actions">
-            <button (click)="selectedReport = null">
-              ← Regresar
-            </button>
-          </div>
         </div>
+
       </div>
     </div>
   

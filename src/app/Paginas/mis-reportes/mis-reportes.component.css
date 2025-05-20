@@ -35,7 +35,7 @@
   }
   
   .my-report-thumbnail {
-      height: 200px;
+      height: 300px;
       overflow: hidden;
       border-bottom: 1px solid #eee;
       margin-bottom: 10px;
@@ -64,6 +64,13 @@
     color: #333;
     margin-bottom: 5px;
   }
+
+  .map-coordinates {
+    font-size: 0.7rem;
+    color: #777;
+    margin-bottom: 5px;
+  }
+  
   
   .my-report-category {
     font-size: 0.8rem;
@@ -112,7 +119,7 @@
       padding: 15px;
       border-radius: 8px;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-      max-height: 400px;
+      max-height: 250px;
       overflow: hidden;
       display: flex;
       flex-direction: column;

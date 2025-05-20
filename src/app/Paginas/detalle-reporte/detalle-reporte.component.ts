@@ -20,7 +20,7 @@ import { MatOptionModule } from '@angular/material/core';
   selector: 'app-detalle-reporte',
   templateUrl: './detalle-reporte.component.html',
   styleUrls: ['./detalle-reporte.component.css'],
-  imports: [ComentariosComponent, CommonModule, ReactiveFormsModule, MatDialogModule, MatDividerModule, MatButtonModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatOptionModule]
+  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatDividerModule, MatButtonModule, MatInputModule, MatFormFieldModule, MatSelectModule, MatOptionModule]
 })
 export class DetalleReporteComponent implements OnInit {
   commentForm: FormGroup;

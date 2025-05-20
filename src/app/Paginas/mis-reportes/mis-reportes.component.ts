@@ -4,12 +4,14 @@ import { AuthService } from '../../servicios/auth.service';
 import { ComentarioService } from '../../servicios/comentario.service';
 import { CategoriaService } from '../../servicios/categoria.service';
 import { Categoria } from '../../interfaces/categoria.interface';
+import { environment } from './enviromment';
 import { Router } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { of, forkJoin } from 'rxjs';
 import { catchError, switchMap, map } from 'rxjs/operators';
 
+declare var mapboxgl: any;
 @Component({
   selector: 'app-mis-reportes',
   imports: [ReactiveFormsModule, CommonModule],
@@ -31,6 +33,7 @@ export class MisReportesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    (mapboxgl as any).accessToken = environment.mapboxToken;
     this.loadMyReports();
   }
 
@@ -64,6 +67,14 @@ loadMyReports(): void {
                 nombreCategoria: categoria?.nombre || 'Sin categoría'
               };
             });
+
+            setTimeout(() => {
+              this.reports.forEach((report, i) => {
+                if (report.ubicacion?.latitud && report.ubicacion?.longitud) {
+                  this.initMap(report.ubicacion.latitud, report.ubicacion.longitud, report.id);
+                }
+              });
+            }, 100);
         },
         error: (error) => {
           console.error('Error fetching my reports:', error);
@@ -118,6 +129,13 @@ loadMyReports(): void {
 
   closeReportDetails(): void {
     this.selectedReport = null;
+      setTimeout(() => {
+        this.reports.forEach((report, i) => {
+          if (report.ubicacion?.latitud && report.ubicacion?.longitud) {
+            this.initMap(report.ubicacion.latitud, report.ubicacion.longitud, report.id);
+          }
+        });
+      }, 100);
   }
 
   editReport(reportId: string): void {
@@ -138,5 +156,23 @@ loadMyReports(): void {
         }
       });
     }
+  }
+
+  initMap(lat: number, lng: number, reportId: string): void {
+    const mapContainer = document.getElementById(`map-${reportId}`);
+    if (!mapContainer) {
+      console.warn(`No se encontró el div para el mapa con ID map-${reportId}`);
+      return;
+    }
+
+    const map = new mapboxgl.Map({
+      container: mapContainer,
+      style: 'mapbox://styles/mapbox/streets-v11',
+      center: [lng, lat],
+      zoom: 14,
+      interactive: true
+    });
+
+    new mapboxgl.Marker().setLngLat([lng, lat]).addTo(map);
   }
 }

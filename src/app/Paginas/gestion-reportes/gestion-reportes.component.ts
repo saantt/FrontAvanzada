@@ -75,7 +75,9 @@ export class GestionReportesComponent implements OnInit{
 
         this.reportService.getReports().subscribe({
           next: (reportesData) => {
-            const reportsConCategoria = reportesData.map(report => {
+            const reportsConCategoria = reportesData
+            .filter(report => report.estadoActual?.estado !== 'ELIMINADO')
+            .map(report => {
               const categoria = categoriasData.find(cat => cat.id === report.categoriaId);
               return {
                 ...report,
