@@ -1,0 +1,11 @@
+.basic-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.basic-table th, .basic-table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+.basic-table th {
+  background-color: #f2f2f2;
+}

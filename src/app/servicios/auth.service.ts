@@ -252,6 +252,19 @@ export class AuthService {
     return this.http.get<any>(`${this.apiUrl}/users/profile`); // Or the appropriate endpoint
   }
 
+  getCurrentUsers(): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/usuarios`).pipe(
+      map((response: any) => {
+        if (response.respuesta) {
+          return response.respuesta;
+        } else {
+          return []; //  Devolver un array vacío por defecto
+        }
+      }),
+      catchError(this.handleError)
+    );
+  }
+
   getUserComment(idReporte: string): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/usuarios/${idReporte}`).pipe(
       map((response: any) => {

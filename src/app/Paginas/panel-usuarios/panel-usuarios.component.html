@@ -1,1 +1,25 @@
-<p>panel-usuarios works!</p>
+<div class="table-container">
+  <h2>Usuarios</h2>
+  <table class="basic-table">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Correo</th>
+        <th>Ciudad</th>
+        <th>Teléfono</th>
+        <th>Rol</th>
+        <th>Estado</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let user of dataSource?.data">
+        <td>{{ user.nombre }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.ciudad }}</td>
+        <td>{{ user.telefono }}</td>
+        <td>{{ user.rol }}</td>
+        <td>{{ user.estado }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
