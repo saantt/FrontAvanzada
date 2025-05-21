@@ -27,20 +27,20 @@
               <li><a routerLink="/mis-reportes" routerLinkActive="active" class="nav-link">Mis Reportes</a></li>
               <li><a routerLink="/detalle-reporte" routerLinkActive="active" class="nav-link">Detalles del Reporte</a></li>
               <li><a routerLink="/formulario" routerLinkActive="active" routerLinkActive="active" class="nav-link">Nuevo Reporte</a></li>
-              <li><a routerLink="/ver-reportes-admin" routerLinkActive="active" class="nav-link">Reportes Admin</a></li>
+              <!-- <li><a routerLink="/ver-reportes-admin" routerLinkActive="active" class="nav-link">Reportes Admin</a></li> -->
             </ul> 
           </li>
 
           <li *ngIf="isLoggedIn"><a routerLink="/notificaciones" routerLinkActive="active" class="nav-link">Notificaciones</a></li>
 
           <!-- Categorias Admin -->
-           <li *ngIf="isLoggedIn"><a routerLink="/categoria" routerLinkActive="active" class="nav-link">Categoría</a></li>
+           <li *ngIf="isLoggedIn && users?.rol == 'ADMINISTRADOR'"><a routerLink="/categoria" routerLinkActive="active" class="nav-link">Categoría</a></li>
 
           <!-- Admin -->
           <!-- <li *ngIf="isLoggedIn"><a routerLink="/cuenta-admin" routerLinkActive="active" class="nav-link">Cuenta Admin</a></li> -->
-          <li *ngIf="isLoggedIn"><a routerLink="/gestion-reportes" routerLinkActive="active" class="nav-link">Gestión</a></li>
+          <li *ngIf="isLoggedIn "><a routerLink="/gestion-reportes" routerLinkActive="active" class="nav-link">Gestión</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/informes" routerLinkActive="active" class="nav-link">Informes</a></li>
-          <li *ngIf="isLoggedIn"><a routerLink="/panel-usuarios" routerLinkActive="active" class="nav-link">Usuarios</a></li>
+          <li *ngIf="isLoggedIn && users?.rol == 'ADMINISTRADOR'"><a routerLink="/panel-usuarios" routerLinkActive="active" class="nav-link">Usuarios</a></li>
           <li *ngIf="isLoggedIn"><a routerLink="/configuracion" routerLinkActive="active" class="nav-link">Configuración</a></li>
         </ul>
         <hr/>

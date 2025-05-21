@@ -12,6 +12,7 @@ import { AuthService } from './servicios/auth.service';
 export class AppComponent implements OnInit {
   title = 'Proyecto-Programacion-Avanzada';
   footer = 'Universidad del Quindío - 2025-1'; 
+  users: any = null ;
 
   isLoggedIn: boolean = false;
   displayReports: boolean = false;
@@ -31,8 +32,37 @@ export class AppComponent implements OnInit {
     const isLogged = this.authService.isLoggedIn;
     this.authService.authStatus.next(isLogged);
     this.authService.authStatus.subscribe(status => {
+
+      if (status) {
+        const userId = this.obtenerClienteIdDesdeToken();
+        if (userId) {
+          this.authService.getCurrentUserId(userId).subscribe({
+            next: (data) => {
+              this.users = data
+            },
+            error: (error) => {
+              console.error('Error fetching my reports:', error);
+            }
+          });
+        }
+      }else{
+        this.users = null;
+      }
       this.isLoggedIn = status;
     });
+  }
+
+  // obtener id del usuario
+  obtenerClienteIdDesdeToken(): string | null {
+    const token = localStorage.getItem('token');
+    if (!token) return null;
+ 
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.sub || payload.id || null; // depende de cómo generaste el JWT
+    } catch (e) {
+      return null;
+    }
   }
 
   toggleReportes() {

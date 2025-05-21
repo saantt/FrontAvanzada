@@ -279,11 +279,12 @@ export class AuthService {
   }
 
   //  No es necesario getToken() ya que usamos currentUserValue
-  getCurrentUserId(): string | null {
-    const user = this.currentUserValue;
-    if (user) {
-      return user._id || null; // Accede al ID del usuario desde currentUserValue
-    }
-    return null;
+  getCurrentUserId(id: string | null): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/usuarios/${id}`).pipe(
+      map((response: any) => {
+        return response.respuesta;
+      }),
+      catchError(this.handleError)
+    )
   }
 }
