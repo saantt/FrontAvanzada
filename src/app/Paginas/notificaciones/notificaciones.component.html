@@ -1,20 +1,32 @@
-<div class="notifications-container">
-  <h2 class="notifications-title">Notificaciones</h2>
-  <ul class="notifications-list" *ngIf="notifications && notifications.length > 0; else noNotifications">
-    <li *ngFor="let notification of notifications" class="notification-item" (click)="markAsReadAndGoToReport(notification)" [ngClass]="{'unread': !notification.read}">
-      <div class="notification-content">
-        <div class="notification-header">
-          <span class="notification-type">{{ getNotificationTypeIcon(notification.type) }} {{ notification.type }}</span>
-          <span class="notification-date">{{ notification.createdAt | date:'medium' }}</span>
-        </div>
-        <p class="notification-message">{{ notification.message }}</p>
-      </div>
-      <div class="chevron-container">
-        <span class="material-symbols-outlined">chevron_right</span>
-      </div>
-    </li>
-  </ul>
-  <ng-template #noNotifications>
-    <p class="no-notifications">No hay notificaciones.</p>
-  </ng-template>
+<div class="container mt-4">
+  <h2 class="fw-bold">Notificaciones</h2>
+
+  <div *ngIf="isLoading" class="mt-3">
+    <p>Cargando notificaciones...</p>
+  </div>
+
+  <div *ngIf="!isLoading && notificaciones.length === 0" class="mt-3">
+    <p>No hay notificaciones para mostrar.</p>
+  </div>
+
+  <div *ngIf="!isLoading && notificaciones.length > 0" class="mt-3 table-responsive">
+    <table class="table table-bordered table-hover">
+      <thead class="table-light">
+        <tr>
+          <th>Título</th>
+          <th>Mensaje</th>
+          <th>Tipo</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let notificacion of notificaciones">
+          <td>{{ notificacion.title }}</td>
+          <td>{{ notificacion.message }}</td>
+          <td>{{ notificacion.tipoNotificacion }}</td>
+          <td>{{ notificacion.timestamp }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

@@ -7,7 +7,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { JwtInterceptor } from './servicios/auth.interceptor';
 import { AuthService } from './servicios/auth.service';
-
+import { NotificationService } from './servicios/notificacion.service';
+import { NotificacionesComponent } from './Paginas/notificaciones/notificaciones.component';
 
 @NgModule({
 
@@ -17,11 +18,13 @@ import { AuthService } from './servicios/auth.service';
     RouterModule,
     AppComponent,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    BrowserModule
     // otros módulos que uses
   ],
   providers: [
     AuthService,
+    NotificationService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,

@@ -1,69 +1,55 @@
 import { Component, OnInit } from '@angular/core';
-import { Notification } from './notification.interface'; // Asegúrate de que la ruta sea correcta
-import { Router } from '@angular/router';
-import { NotificationService } from '../../servicios/notification.service'; // Asegúrate de crear este servicio
-import { ReactiveFormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
+import { NotificationService } from '../../servicios/notification.service';
+import { AuthService } from '../../servicios/auth.service';
+import { Notification } from '../../interfaces/notification.interface';
 
 @Component({
   selector: 'app-notificaciones',
-  imports: [ReactiveFormsModule,CommonModule],
+  standalone: true,
+  imports: [CommonModule], // Esto soluciona el error NG8103
   templateUrl: './notificaciones.component.html',
-  styleUrl: './notificaciones.component.css'
+  styleUrls: ['./notificaciones.component.css'],
+  providers: [DatePipe]
 })
-export class NotificacionesComponent implements OnInit{
-  notifications: Notification[] = [];
-  // Inyecta el servicio y el router
-  constructor(private notificationService: NotificationService, private router: Router) {}
+export class NotificacionesComponent implements OnInit {
+
+  public notificaciones: Notification[] = [];
+  public isLoading: boolean = true;
+
+  constructor(
+    private notificationService: NotificationService,
+    private authService: AuthService,
+    private datePipe: DatePipe
+  ) {}
 
   ngOnInit(): void {
-    this.loadNotifications();
+    this.cargarNotificaciones();
   }
 
-  loadNotifications() {
-    this.notificationService.getNotifications().subscribe(
-      (notifications) => {
-        this.notifications = notifications;
-      },
-      (error) => {
-        console.error('Error al cargar las notificaciones', error);
-        // Aquí podrías mostrar un mensaje de error al usuario
-      }
-    );
-  }
-
-  getNotificationTypeIcon(type: string): string {
-    switch (type) {
-      case 'Nuevo Reporte':
-        return '📍'; // Icono de ubicación
-      case 'Nuevo Comentario':
-        return '💬'; // Icono de comentario
-      case 'Reporte Actualizado':
-        return 'ℹ️';
-      default:
-        return '🔔'; // Icono de campana genérico
-    }
-  }
-
-  markAsReadAndGoToReport(notification: Notification) {
-    if (!notification.read) {
-      this.notificationService.markAsRead(notification.id).subscribe(
-        () => {
-          notification.read = true; // Actualiza la interfaz de usuario inmediatamente
-          //  this.loadNotifications(); // Esto recargaría TODAS las notificaciones
+  cargarNotificaciones(): void {
+    const usuarioId = this.authService.getUserIdFromToken();
+    if (usuarioId) {
+      this.isLoading = true;
+      this.notificationService.getNotificacionesPorUsuario(usuarioId).subscribe({
+        next: (notificaciones) => {
+          this.notificaciones = notificaciones.map(notif => ({
+            ...notif,
+            fechaCreacion: this.formatFecha(notif.timestamp)
+          }));
+          this.isLoading = false;
         },
-        (error) => {
-          console.error('Error al marcar como leída', error);
+        error: (error) => {
+          console.error('Error al cargar notificaciones', error);
+          this.isLoading = false;
         }
-      );
+      });
+    } else {
+      this.isLoading = false;
     }
+  }
 
-    if (notification.reportId) {
-      this.router.navigate(['/report', notification.reportId]); //  Navega al reporte
-    }
-    //  Si no hay reportId, podrías navegar a una página de notificaciones generales
-    //  else {
-    //   this.router.navigate(['/notifications']);
-    //  }
+  formatFecha(fecha: string): string {
+    return this.datePipe.transform(fecha, 'medium') || '';
   }
 }
