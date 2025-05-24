@@ -7,7 +7,7 @@ import { Notification } from '../interfaces/notification.interface';
   providedIn: 'root'
 })
 export class NotificationService {
-  private apiUrl = 'http://localhost:8080/api/notificaciones'; 
+  private apiUrl = 'https://proyectofinalprogramacionavanzada-3.onrender.com/api/notificaciones'; 
 
   private getAuthHeaders(): { headers: HttpHeaders } {
     const token = localStorage.getItem('token');

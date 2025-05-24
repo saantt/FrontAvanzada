@@ -10,7 +10,7 @@ import { ApiResponseInforme } from '../interfaces/informe.interface';
   providedIn: 'root',
 })
 export class ReportService {
-  private apiUrl = 'http://localhost:8080/api/reportes'; // Ajusta según tu backend
+  private apiUrl = 'https://proyectofinalprogramacionavanzada-3.onrender.com/api/reportes'; // Ajusta según tu backend
 
   constructor(private http: HttpClient) { }
 

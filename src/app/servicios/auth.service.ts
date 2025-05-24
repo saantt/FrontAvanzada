@@ -39,7 +39,7 @@ interface RecoverResponse {
 })
 
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/api'; // Ajusta según tu backend
+  private apiUrl = 'https://proyectofinalprogramacionavanzada-3.onrender.com/api'; // Ajusta según tu backend
   private currentUserSubject: BehaviorSubject<User | null>;
   public currentUser: Observable<User | null>;
   private jwtHelper = new JwtHelperService();

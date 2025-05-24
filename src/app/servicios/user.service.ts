@@ -8,7 +8,7 @@ import { environment } from '../Paginas/formulario/enviroment';
   providedIn: 'root',
 })
 export class UserService {
-  private apiUrl = 'http://localhost:8080/api/usuarios'; // Ajusta según tu backend
+  private apiUrl = 'https://proyectofinalprogramacionavanzada-3.onrender.com/api/usuarios'; // Ajusta según tu backend
 
   constructor(private http: HttpClient) {}
 
