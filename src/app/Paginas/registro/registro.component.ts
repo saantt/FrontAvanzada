@@ -20,18 +20,19 @@ export class RegistroComponent {
 
   private crearFormulario() {
     this.registroForm = this.formBuilder.group({     
-      nombre: ['', [Validators.required]],
-      telefono: ['', [
-        Validators.required, 
-        Validators.pattern(/^[0-9]{10}$/)
-      ]],
-      direccion: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],     
-      password: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]],
-      confirmaPassword: ['', [Validators.required]] // ← Añade este control
-    }, {
-      validators: this.passwordsMatchValidator
-    } as AbstractControlOptions);
+  nombre: ['', [Validators.required]],
+  telefono: ['', [
+    Validators.required, 
+    Validators.pattern(/^[0-9]{10}$/)
+  ]],
+  ciudad: ['', [Validators.required]], // ← ¡AGREGADO AQUÍ!
+  direccion: ['', [Validators.required]],
+  email: ['', [Validators.required, Validators.email]],     
+  password: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(7)]],
+  confirmaPassword: ['', [Validators.required]] 
+}, {
+  validators: this.passwordsMatchValidator
+} as AbstractControlOptions);
   }
 
   public passwordsMatchValidator(formGroup: FormGroup) {

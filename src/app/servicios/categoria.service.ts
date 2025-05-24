@@ -9,7 +9,7 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class CategoriaService {
 
-  private baseUrl = 'https://proyectofinalprogramacionavanzada-3.onrender.com/api/categorias';
+  private baseUrl = 'https://proyectofinalprogramacionavanzada-4.onrender.com/api/categorias';
 
   private getAuthHeaders(): { headers: HttpHeaders } {
   const token = localStorage.getItem('token');

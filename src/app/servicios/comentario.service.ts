@@ -7,7 +7,7 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root'
 })
 export class ComentarioService {
-  private baseUrl = 'https://proyectofinalprogramacionavanzada-3.onrender.com/api/comentarios'; // Ajusta si tienes prefijo
+  private baseUrl = 'https://proyectofinalprogramacionavanzada-4.onrender.com/api/comentarios'; // Ajusta si tienes prefijo
 
   constructor(private http: HttpClient) {}
 
